@@ -91,13 +91,13 @@ namespace BetterKeyBindings
             return key == KeyCode.None ? main : ModsPrefix(mods) + main;
         }
 
-        public static int Pack(KeyCode key, int mods) { return (int)key | ((mods & All) << 16); }
+        public static int Pack(KeyCode key, int mods) { return Rule.Pack((int)key, mods); }
 
         public static void Unpack(int packed, out KeyCode key, out int mods)
         {
-            int k = packed & 0xFFFF;
+            int k;
+            Rule.Unpack(packed, out k, out mods);
             key = Enum.IsDefined(typeof(KeyCode), k) ? (KeyCode)k : KeyCode.None;
-            mods = (packed >> 16) & All;
         }
     }
 }

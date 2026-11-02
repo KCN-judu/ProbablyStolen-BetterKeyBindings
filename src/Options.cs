@@ -34,12 +34,10 @@ namespace BetterKeyBindings
         // Modifiers chosen in the open window, by option id. Saved on Apply.
         static readonly Dictionary<string, int> pendingMods = new Dictionary<string, int>();
 
-        // The capture in progress: keys pressed since it began, the main key and the modifiers held when it went
-        // down, the last modifier pressed, and the text last shown on the button.
+        // The capture in progress (see Capture), the option it is for, and the text last shown on its button.
         static string capturing;
-        static readonly List<KeyCode> pressed = new List<KeyCode>();
-        static KeyCode mainKey, lastModifier;
-        static int mainMods, lastPollFrame = -1;
+        static readonly Capture capture = new Capture();
+        static int lastPollFrame = -1;
         static string shownText;
         static KeyCode[] keys;
 
@@ -211,33 +209,21 @@ namespace BetterKeyBindings
             // Nothing is decided while keys are down: the button shows the combination so far, and the binding is
             // taken once every key pressed since the capture began is released.
             foreach (var k in CaptureKeys())
-            {
-                if (!Input.GetKeyDown(k)) continue;
-                if (!pressed.Contains(k)) pressed.Add(k);
-                if (Combo.IsModifier(k)) lastModifier = k;
-                else { mainKey = k; mainMods = Combo.Held(k); }
-            }
-            if (pressed.Count == 0) return;
+                if (Input.GetKeyDown(k)) capture.Down((int)k, Combo.GroupOf(k), Combo.Held(k));
+            if (!capture.Started) return;
 
             bool anyDown = false;
-            foreach (var k in pressed) if (Input.GetKey(k)) { anyDown = true; break; }
-            if (!anyDown)
+            foreach (var k in capture.Pressed) if (Input.GetKey((KeyCode)k)) { anyDown = true; break; }
+            int key, mods;
+            if (!anyDown && capture.Decide(out key, out mods))
             {
-                KeyCode key; int mods;
-                if (mainKey != KeyCode.None) { key = mainKey; mods = mainMods; }
-                else
-                {
-                    // Only modifiers: the last one is the key, the others its modifiers (Left Shift, or Ctrl + Left Shift).
-                    key = lastModifier;
-                    mods = 0;
-                    foreach (var k in pressed) mods |= Combo.GroupOf(k);
-                    mods &= ~Combo.GroupOf(key);
-                }
-                Finish(ui, id, key, combos ? mods : 0);
+                Finish(ui, id, (KeyCode)key, combos ? mods : 0);
                 return;
             }
 
-            string text = mainKey != KeyCode.None ? Combo.Name(mainKey, combos ? mainMods : 0) : PressedModifiers() + "...";
+            var main = (KeyCode)capture.Main;
+            string text = main != KeyCode.None ? Combo.Name(main, combos ? capture.MainMods : 0)
+                : Combo.ModsPrefix(capture.PressedModifiers) + "...";
             if (text != shownText)
             {
                 shownText = text;
@@ -247,18 +233,9 @@ namespace BetterKeyBindings
             }
         }
 
-        static string PressedModifiers()
-        {
-            int mods = 0;
-            foreach (var k in pressed) mods |= Combo.GroupOf(k);
-            return Combo.ModsPrefix(mods);
-        }
-
         static void ResetCapture()
         {
-            pressed.Clear();
-            mainKey = lastModifier = KeyCode.None;
-            mainMods = 0;
+            capture.Reset();
             shownText = null;
         }
 
@@ -303,8 +280,10 @@ namespace BetterKeyBindings
             bool combos = TakesCombos(id);
             foreach (var kv in pending)
             {
-                if (kv.Key == id || kv.Value != key || key == KeyCode.None || GroupOf(kv.Key) != group) continue;
-                if (!combos || !TakesCombos(kv.Key) || PendingMods(kv.Key) == mods || SameOtherMod(id, kv.Key)) return kv.Key;
+                if (kv.Key == id || kv.Value != key) continue;
+                if (Rule.Collides(GroupOf(kv.Key) == group, (int)key, mods, combos, (int)kv.Value, PendingMods(kv.Key),
+                        TakesCombos(kv.Key), SameOtherMod(id, kv.Key)))
+                    return kv.Key;
             }
             return null;
         }

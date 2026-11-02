@@ -48,22 +48,30 @@ msgid "Default"
 msgstr "默认值"
 
 #: manual/building.md:24
+msgid "Checks"
+msgstr "检查"
+
+#: manual/building.md:30
+msgid "It runs the mod's decisions headless, and the game's mod scanner on the build when the game is installed."
+msgstr "它在无界面的环境中运行模组的判定逻辑；如果装了游戏，还会对构建结果运行游戏自带的模组扫描器。"
+
+#: manual/building.md:32
 msgid "Install by hand"
 msgstr "手动安装"
 
-#: manual/building.md:26
+#: manual/building.md:34
 msgid "Copy the folder `out/better_key_bindings` into the game's `Mods` folder, start the game, and enable the mod in the Mods menu. Mods load when the game starts, so restart after enabling or updating one."
 msgstr "把 `out/better_key_bindings` 文件夹复制到游戏的 `Mods` 文件夹，启动游戏，并在模组菜单中启用它。模组在游戏启动时加载，所以启用或更新模组后需要重启游戏。"
 
-#: manual/building.md:28
+#: manual/building.md:36
 msgid "The mod declares no capabilities, so the game enables it without a permission prompt."
 msgstr "这个模组没有声明任何权限，所以游戏启用它时不会弹出权限提示。"
 
-#: manual/building.md:30
+#: manual/building.md:38
 msgid "Translations"
 msgstr "翻译"
 
-#: manual/building.md:32
+#: manual/building.md:40
 msgid "The mod's text is in `Localization/`, one file per game language, named by the game's locale code: `en`, `zh`, `ja`, `ko`, `de`, `fr`, `es`, `it`, `pl`, `ru` and `ptBR`. A missing line falls back to English."
 msgstr "模组的文字位于 `Localization/`，游戏的每种语言一个文件，文件名是游戏的语言代码：`en`、`zh`、`ja`、`ko`、`de`、`fr`、`es`、`it`、`pl`、`ru` 和 `ptBR`。缺少的条目会回退到英文。"
 
@@ -112,8 +120,8 @@ msgid "**Dragging keys** that the game checks directly (Left Alt and Left Shift 
 msgstr "游戏直接检查的**拖动按键**（开始拖动时的左 Alt 和左 Shift，精确放置时的 Shift）会改为读取模组自己的绑定。"
 
 #: manual/how-it-works.md:20
-msgid "A binding may fire when its key is pressed, its modifiers are held, and no other binding on the same key asks for more of the held modifiers. The rule lives in `src/Rule.cs`, and `tests/RuleTest.cs` checks it."
-msgstr "一个绑定在以下情况下才会触发：它的按键被按下，它的修饰键都被按住，并且同一按键上没有其他绑定要求更多正被按住的修饰键。这条规则位于 `src/Rule.cs`，由 `tests/RuleTest.cs` 检查。"
+msgid "A binding may fire when its key is pressed, its modifiers are held, and no other binding on the same key asks for more of the held modifiers. The rule lives in `src/Rule.Pure.cs`."
+msgstr "一个绑定在以下情况下才会触发：它的按键被按下，它的修饰键都被按住，并且同一按键上没有其他绑定要求更多正被按住的修饰键。这条规则位于 `src/Rule.Pure.cs`。"
 
 #: manual/how-it-works.md:22
 msgid "The options window"
@@ -140,12 +148,20 @@ msgid "Tests"
 msgstr "测试"
 
 #: manual/how-it-works.md:34
-msgid "`tests/RuleTest.cs` runs the firing rule on combinations such as E against Ctrl + E."
-msgstr "`tests/RuleTest.cs` 用 E 与 Ctrl + E 这样的组合检验触发规则。"
+msgid "The mod's decisions are kept apart from the game in `src/*.Pure.cs`, which use nothing but plain C#: which binding fires, what the pressed keys become when they are released, when two bindings collide, and how a binding is stored. The code that talks to the game only reads keys and options and passes them on."
+msgstr "模组的判定逻辑与游戏分开，放在 `src/*.Pure.cs` 中，只使用纯 C#：哪个绑定触发、按下的键在松开时变成什么、两个绑定何时冲突、绑定如何保存。与游戏交互的代码只负责读取按键和选项，再把它们交给这些判定。"
 
-#: manual/how-it-works.md:35
-msgid "`tests/ScanTest.cs` runs the game's own mod scanner on the built DLL. The result is no capabilities."
-msgstr "`tests/ScanTest.cs` 对构建出的 DLL 运行游戏自带的模组扫描器，结果是不需要任何权限。"
+#: manual/how-it-works.md:36
+msgid "`tests/run.sh` runs the checks:"
+msgstr "`tests/run.sh` 运行这些检查："
+
+#: manual/how-it-works.md:38
+msgid "`tests/PureTest.cs` runs those decisions headless, without the game or Unity: E against Ctrl + E, Shift held on the way to Shift + Space, Ctrl + Shift + A, a modifier on its own, collisions within one mod, and more."
+msgstr "`tests/PureTest.cs` 在不需要游戏或 Unity 的环境中检验这些判定：E 与 Ctrl + E、为按 Shift + 空格而先按住的 Shift、Ctrl + Shift + A、单独的修饰键、同一模组内的冲突等。"
+
+#: manual/how-it-works.md:39
+msgid "`tests/ScanTest.cs` runs the game's own mod scanner on the built DLL, when the game is installed. The result is no capabilities."
+msgstr "装了游戏时，`tests/ScanTest.cs` 对构建出的 DLL 运行游戏自带的模组扫描器，结果是不需要任何权限。"
 
 #: manual/index.md:1
 msgid "Better Key Bindings"

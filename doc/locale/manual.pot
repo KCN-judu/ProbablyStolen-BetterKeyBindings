@@ -48,22 +48,30 @@ msgid "Default"
 msgstr ""
 
 #: manual/building.md:24
-msgid "Install by hand"
-msgstr ""
-
-#: manual/building.md:26
-msgid "Copy the folder `out/better_key_bindings` into the game's `Mods` folder, start the game, and enable the mod in the Mods menu. Mods load when the game starts, so restart after enabling or updating one."
-msgstr ""
-
-#: manual/building.md:28
-msgid "The mod declares no capabilities, so the game enables it without a permission prompt."
+msgid "Checks"
 msgstr ""
 
 #: manual/building.md:30
-msgid "Translations"
+msgid "It runs the mod's decisions headless, and the game's mod scanner on the build when the game is installed."
 msgstr ""
 
 #: manual/building.md:32
+msgid "Install by hand"
+msgstr ""
+
+#: manual/building.md:34
+msgid "Copy the folder `out/better_key_bindings` into the game's `Mods` folder, start the game, and enable the mod in the Mods menu. Mods load when the game starts, so restart after enabling or updating one."
+msgstr ""
+
+#: manual/building.md:36
+msgid "The mod declares no capabilities, so the game enables it without a permission prompt."
+msgstr ""
+
+#: manual/building.md:38
+msgid "Translations"
+msgstr ""
+
+#: manual/building.md:40
 msgid "The mod's text is in `Localization/`, one file per game language, named by the game's locale code: `en`, `zh`, `ja`, `ko`, `de`, `fr`, `es`, `it`, `pl`, `ru` and `ptBR`. A missing line falls back to English."
 msgstr ""
 
@@ -112,7 +120,7 @@ msgid "**Dragging keys** that the game checks directly (Left Alt and Left Shift 
 msgstr ""
 
 #: manual/how-it-works.md:20
-msgid "A binding may fire when its key is pressed, its modifiers are held, and no other binding on the same key asks for more of the held modifiers. The rule lives in `src/Rule.cs`, and `tests/RuleTest.cs` checks it."
+msgid "A binding may fire when its key is pressed, its modifiers are held, and no other binding on the same key asks for more of the held modifiers. The rule lives in `src/Rule.Pure.cs`."
 msgstr ""
 
 #: manual/how-it-works.md:22
@@ -140,11 +148,19 @@ msgid "Tests"
 msgstr ""
 
 #: manual/how-it-works.md:34
-msgid "`tests/RuleTest.cs` runs the firing rule on combinations such as E against Ctrl + E."
+msgid "The mod's decisions are kept apart from the game in `src/*.Pure.cs`, which use nothing but plain C#: which binding fires, what the pressed keys become when they are released, when two bindings collide, and how a binding is stored. The code that talks to the game only reads keys and options and passes them on."
 msgstr ""
 
-#: manual/how-it-works.md:35
-msgid "`tests/ScanTest.cs` runs the game's own mod scanner on the built DLL. The result is no capabilities."
+#: manual/how-it-works.md:36
+msgid "`tests/run.sh` runs the checks:"
+msgstr ""
+
+#: manual/how-it-works.md:38
+msgid "`tests/PureTest.cs` runs those decisions headless, without the game or Unity: E against Ctrl + E, Shift held on the way to Shift + Space, Ctrl + Shift + A, a modifier on its own, collisions within one mod, and more."
+msgstr ""
+
+#: manual/how-it-works.md:39
+msgid "`tests/ScanTest.cs` runs the game's own mod scanner on the built DLL, when the game is installed. The result is no capabilities."
 msgstr ""
 
 #: manual/index.md:1

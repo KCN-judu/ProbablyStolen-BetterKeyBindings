@@ -17,7 +17,7 @@ Bindings are read in four ways, and each one is covered:
 - **Other mods' bindings**: those mods read their key straight from the engine. When such a read finds the key pressed, the mod checks who is asking: a read by the mod that owns the binding counts only if the binding may fire. The game's own direct key reads are left alone.
 - **Dragging keys** that the game checks directly (Left Alt and Left Shift when a drag starts, Shift for precise placement) are redirected to the mod's own bindings.
 
-A binding may fire when its key is pressed, its modifiers are held, and no other binding on the same key asks for more of the held modifiers. The rule lives in `src/Rule.cs`, and `tests/RuleTest.cs` checks it.
+A binding may fire when its key is pressed, its modifiers are held, and no other binding on the same key asks for more of the held modifiers. The rule lives in `src/Rule.Pure.cs`.
 
 ## The options window
 
@@ -31,5 +31,9 @@ Everything the mod shows comes from the game's own UI assets. The option rows ar
 
 ## Tests
 
-- `tests/RuleTest.cs` runs the firing rule on combinations such as E against Ctrl + E.
-- `tests/ScanTest.cs` runs the game's own mod scanner on the built DLL. The result is no capabilities.
+The mod's decisions are kept apart from the game in `src/*.Pure.cs`, which use nothing but plain C#: which binding fires, what the pressed keys become when they are released, when two bindings collide, and how a binding is stored. The code that talks to the game only reads keys and options and passes them on.
+
+`tests/run.sh` runs the checks:
+
+- `tests/PureTest.cs` runs those decisions headless, without the game or Unity: E against Ctrl + E, Shift held on the way to Shift + Space, Ctrl + Shift + A, a modifier on its own, collisions within one mod, and more.
+- `tests/ScanTest.cs` runs the game's own mod scanner on the built DLL, when the game is installed. The result is no capabilities.
