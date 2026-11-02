@@ -1,0 +1,20 @@
+# Better Key Bindings - 한국어 (ko)
+section_hold,드래그 중 누르고 있는 키
+section_deprecated,사용 중단된 키 지정
+deprecated_note,사용 중단: 현재 게임에는 이렇게 나눌 수 있는 아이템이 없어 이 키는 효과가 없습니다.
+opt_take_one,하나만 집기 (누른 채 드래그)
+opt_take_one_tip,여러 개인 아이템을 드래그하기 시작할 때 누르고 있으면 하나만 집습니다.
+opt_take_half,절반 집기 (누른 채 드래그)
+opt_take_half_tip,여러 개인 아이템을 드래그하기 시작할 때 누르고 있으면 절반을 집습니다.
+opt_precise_place,정밀 배치 (선택한 아이템을 옮길 때 누르기)
+opt_precise_place_tip,선택한 여러 아이템을 옮길 때 누르고 있으면 정확하게 배치합니다.
+mod_ctrl,Ctrl
+mod_shift,Shift
+mod_alt,Alt
+key_mouse_middle,마우스 가운데 버튼
+key_mouse_4,마우스 버튼 4
+key_mouse_5,마우스 버튼 5
+conflict_title,이미 사용 중인 키
+conflict_body,{0}은(는) 이미 '{1}'에 지정되어 있습니다. '{1}'의 지정을 해제하고 {0}을(를) '{2}'에 사용할까요?
+conflict_unbind,해제하고 사용
+conflict_keep,취소

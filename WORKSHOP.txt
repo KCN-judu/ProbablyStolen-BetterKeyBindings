@@ -1,0 +1,61 @@
+[h1]Better Key Bindings[/h1]
+Bind Ctrl + E, Shift + Mouse 4 or the middle mouse button to any action, without the plain key firing as well.
+
+[h2]What it adds[/h2]
+[list]
+[*]Every key binding in the options takes [b]Ctrl, Shift and Alt combinations[/b]. Hold the modifiers and press the key.
+[*][b]Middle mouse button and mouse buttons 4 and 5[/b] can be bound like any key, with or without modifiers.
+[*][b]No double triggers[/b]: with E on one action and Ctrl + E on another, Ctrl + E runs only the second.
+[*][b]Conflict prompt[/b]: choosing a key that is already in use asks whether to unbind the other binding.
+[*]The key the game fixes for [b]precise placement[/b] (Shift) becomes a binding.
+[/list]
+
+[h2]Notes[/h2]
+[list]
+[*]Changes wait for [b]Apply[/b], like the game's own key choices.
+[*]Bindings that other mods add to the options take combinations too.
+[*]Text in all eleven languages of the game.
+[*]All of its UI uses the game's own assets, so texture packs restyle it too.
+[*]Needs no special permissions.
+[*]Built for game version 0.46D.
+[/list]
+
+[h2]Source and documentation[/h2]
+[list]
+[*][url=https://kcn-judu.github.io/ProbablyStolen-Mods/en/better-key-bindings/]Documentation[/url] (English and Chinese)
+[*][url=https://github.com/KCN-judu/ProbablyStolen-BetterKeyBindings]Source code on GitHub[/url], Apache License 2.0
+[*][url=https://github.com/KCN-judu/ProbablyStolen-Mods]All mods by KCN-judu[/url]
+[/list]
+Bug reports and suggestions are welcome on GitHub or in the comments.
+
+[hr][/hr]
+
+[h1]按键绑定增强[/h1]
+把 Ctrl + E、Shift + 鼠标按键 4 或鼠标中键绑定到任何操作，而且不会顺带触发单键绑定。
+
+[h2]新增功能[/h2]
+[list]
+[*]选项中的每个按键绑定都支持 [b]Ctrl、Shift、Alt 组合键[/b]：按住修饰键再按主键即可。
+[*][b]鼠标中键、鼠标按键 4 和 5[/b] 可以像普通按键一样绑定，也可以搭配修饰键。
+[*][b]不会误触发[/b]：E 绑定一个操作、Ctrl + E 绑定另一个操作时，按 Ctrl + E 只会执行后者。
+[*][b]冲突提示[/b]：选择已被占用的按键时，会询问是否解除原有绑定。
+[*]游戏写死的[b]精确放置[/b]键（Shift）变成可绑定项。
+[/list]
+
+[h2]说明[/h2]
+[list]
+[*]和游戏自带的按键设置一样，点 [b]应用[/b] 后才会生效。
+[*]其他模组添加到选项里的按键绑定也支持组合键。
+[*]支持游戏的全部十一种语言。
+[*]所有界面都使用游戏自带的 UI 资源，材质包也会一并生效。
+[*]不需要任何特殊权限。
+[*]适用于游戏版本 0.46D。
+[/list]
+
+[h2]源码与文档[/h2]
+[list]
+[*][url=https://kcn-judu.github.io/ProbablyStolen-Mods/zh-cn/better-key-bindings/]中文文档[/url]
+[*][url=https://github.com/KCN-judu/ProbablyStolen-BetterKeyBindings]GitHub 源码[/url]，Apache License 2.0
+[*][url=https://github.com/KCN-judu/ProbablyStolen-Mods]KCN-judu 的全部模组[/url]
+[/list]
+欢迎在 GitHub 或评论区反馈问题和建议。

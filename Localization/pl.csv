@@ -1,0 +1,20 @@
+# Better Key Bindings - Polski (pl)
+section_hold,Klawisze przytrzymywane podczas przeciągania
+section_deprecated,Przestarzałe przypisania klawiszy
+deprecated_note,Przestarzałe: w obecnej wersji gry żadnego przedmiotu nie da się tak podzielić, więc ten klawisz nic nie robi.
+opt_take_one,Weź tylko jeden (przytrzymaj + przeciągnij)
+opt_take_one_tip,Przytrzymaj, zaczynając przeciągać kilka sztuk przedmiotu, aby podnieść tylko jedną.
+opt_take_half,Weź połowę (przytrzymaj + przeciągnij)
+opt_take_half_tip,Przytrzymaj, zaczynając przeciągać kilka sztuk przedmiotu, aby podnieść połowę.
+opt_precise_place,Precyzyjne umieszczanie (przytrzymaj przy przenoszeniu zaznaczenia)
+opt_precise_place_tip,Przytrzymaj podczas przenoszenia kilku zaznaczonych przedmiotów, aby umieścić je precyzyjnie.
+mod_ctrl,Ctrl
+mod_shift,Shift
+mod_alt,Alt
+key_mouse_middle,Środkowy przycisk myszy
+key_mouse_4,Przycisk myszy 4
+key_mouse_5,Przycisk myszy 5
+conflict_title,Klawisz jest już używany
+conflict_body,{0} jest już przypisany do „{1}”. Usunąć przypisanie „{1}” i użyć {0} dla „{2}”?
+conflict_unbind,Usuń i użyj
+conflict_keep,Anuluj

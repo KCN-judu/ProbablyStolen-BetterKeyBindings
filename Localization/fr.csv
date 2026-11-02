@@ -1,0 +1,20 @@
+# Better Key Bindings - Français (fr)
+section_hold,Touches maintenues pendant le glisser
+section_deprecated,Raccourcis obsolètes
+deprecated_note,Obsolète : aucun objet du jeu actuel ne peut être divisé ainsi, cette touche n'a donc aucun effet.
+opt_take_one,Prendre un seul (maintenir + glisser)
+opt_take_one_tip,Maintenir en commençant à faire glisser plusieurs exemplaires d'un objet pour n'en prendre qu'un.
+opt_take_half,Prendre la moitié (maintenir + glisser)
+opt_take_half_tip,Maintenir en commençant à faire glisser plusieurs exemplaires d'un objet pour en prendre la moitié.
+opt_precise_place,Placement précis (maintenir en déplaçant une sélection)
+opt_precise_place_tip,Maintenir en déplaçant plusieurs objets sélectionnés pour les placer avec précision.
+mod_ctrl,Ctrl
+mod_shift,Maj
+mod_alt,Alt
+key_mouse_middle,Bouton central de la souris
+key_mouse_4,Bouton 4 de la souris
+key_mouse_5,Bouton 5 de la souris
+conflict_title,Touche déjà utilisée
+conflict_body,{0} est déjà attribué à « {1} ». Retirer l'attribution de « {1} » et utiliser {0} pour « {2} » ?
+conflict_unbind,Retirer et utiliser
+conflict_keep,Annuler

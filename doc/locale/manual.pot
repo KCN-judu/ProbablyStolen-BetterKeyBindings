@@ -1,0 +1,315 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Probably Stolen Mods documentation\n"
+"Report-Msgid-Bugs-To: https://github.com/KCN-judu/ProbablyStolen-Mods/issues\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: conf.json:summary
+msgid "Key combinations, the middle mouse button and mouse buttons 4 and 5 for every key binding, without double triggers."
+msgstr ""
+
+#: manual/building.md:1
+msgid "Building"
+msgstr ""
+
+#: manual/building.md:4
+msgid "Requirements"
+msgstr ""
+
+#: manual/building.md:6
+msgid "*Probably Stolen*, game version 0.46D. The build compiles against the game's own assemblies in `Probably Stolen_Data/Managed`."
+msgstr ""
+
+#: manual/building.md:7
+msgid "Git Bash or another POSIX shell on Windows."
+msgstr ""
+
+#: manual/building.md:8
+msgid "Nothing else: the C# 5 compiler that ships with Windows (.NET Framework 4) is enough."
+msgstr ""
+
+#: manual/building.md:10
+msgid "Build"
+msgstr ""
+
+#: manual/building.md:17
+msgid "Two environment variables override the defaults:"
+msgstr ""
+
+#: manual/building.md:19
+msgid "Variable"
+msgstr ""
+
+#: manual/building.md:19
+msgid "Default"
+msgstr ""
+
+#: manual/building.md:24
+msgid "Install by hand"
+msgstr ""
+
+#: manual/building.md:26
+msgid "Copy the folder `out/better_key_bindings` into the game's `Mods` folder, start the game, and enable the mod in the Mods menu. Mods load when the game starts, so restart after enabling or updating one."
+msgstr ""
+
+#: manual/building.md:28
+msgid "The mod declares no capabilities, so the game enables it without a permission prompt."
+msgstr ""
+
+#: manual/building.md:30
+msgid "Translations"
+msgstr ""
+
+#: manual/building.md:32
+msgid "The mod's text is in `Localization/`, one file per game language, named by the game's locale code: `en`, `zh`, `ja`, `ko`, `de`, `fr`, `es`, `it`, `pl`, `ru` and `ptBR`. A missing line falls back to English."
+msgstr ""
+
+#: manual/how-it-works.md:1
+msgid "How it works"
+msgstr ""
+
+#: manual/how-it-works.md:3
+msgid "The game stores one key per binding. The mod keeps the modifiers of each binding next to it, and changes the places where the game reads a binding."
+msgstr ""
+
+#: manual/how-it-works.md:5
+msgid "Storing a binding"
+msgstr ""
+
+#: manual/how-it-works.md:7
+msgid "The key stays in the game's own key binding store, so the game saves it as before. The modifiers go to separate player preferences, one per binding. The three dragging keys are stored by the mod, key and modifiers together."
+msgstr ""
+
+#: manual/how-it-works.md:9
+msgid "Modifiers do not care about the side: Ctrl means either Ctrl key, or Cmd on a Mac keyboard. Shift and Alt work the same way."
+msgstr ""
+
+#: manual/how-it-works.md:11
+msgid "Reading a binding"
+msgstr ""
+
+#: manual/how-it-works.md:13
+msgid "Bindings are read in four ways, and each one is covered:"
+msgstr ""
+
+#: manual/how-it-works.md:15
+msgid "**Pressed or held checks** (toolbox slots, the bell, trash, options, control hints, quick move): the mod answers these checks itself, with the modifiers taken into account."
+msgstr ""
+
+#: manual/how-it-works.md:16
+msgid "**Item and dialogue handlers** compare the pressed keys with the binding's key. While such a handler handles a key press, a binding that may not fire reads as unbound, so two bindings on one key stay apart. Key releases keep the plain key, so letting go of a modifier first never leaves an action stuck."
+msgstr ""
+
+#: manual/how-it-works.md:17
+msgid "**Other mods' bindings**: those mods read their key straight from the engine. When such a read finds the key pressed, the mod checks who is asking: a read by the mod that owns the binding counts only if the binding may fire. The game's own direct key reads are left alone."
+msgstr ""
+
+#: manual/how-it-works.md:18
+msgid "**Dragging keys** that the game checks directly (Left Alt and Left Shift when a drag starts, Shift for precise placement) are redirected to the mod's own bindings."
+msgstr ""
+
+#: manual/how-it-works.md:20
+msgid "A binding may fire when its key is pressed, its modifiers are held, and no other binding on the same key asks for more of the held modifiers. The rule lives in `src/Rule.cs`, and `tests/RuleTest.cs` checks it."
+msgstr ""
+
+#: manual/how-it-works.md:22
+msgid "The options window"
+msgstr ""
+
+#: manual/how-it-works.md:24
+msgid "While a binding waits for a key, the mod takes over the game's key capture. Nothing is taken while keys are down: the button shows the combination so far, and the binding is decided once every key pressed since the capture began is released. The last key or mouse button that is not a modifier becomes the main key, with the modifiers held when it went down. When only modifiers were pressed, the last of them becomes the main key and the others its modifiers."
+msgstr ""
+
+#: manual/how-it-works.md:26
+msgid "Conflicts are checked against every key binding in the window, including the ones not yet applied. The dragging keys only conflict with each other, because they are held during a drag while the other bindings are pressed."
+msgstr ""
+
+#: manual/how-it-works.md:28
+msgid "Interface"
+msgstr ""
+
+#: manual/how-it-works.md:30
+msgid "Everything the mod shows comes from the game's own UI assets. The option rows are the game's key binding entries. The unbind prompt is built with the game's own window builder, which creates the game's window, label and button prefabs, in the same style as the options window. The mod draws nothing itself, so a texture pack that restyles those game assets restyles the mod too."
+msgstr ""
+
+#: manual/how-it-works.md:32
+msgid "Tests"
+msgstr ""
+
+#: manual/how-it-works.md:34
+msgid "`tests/RuleTest.cs` runs the firing rule on combinations such as E against Ctrl + E."
+msgstr ""
+
+#: manual/how-it-works.md:35
+msgid "`tests/ScanTest.cs` runs the game's own mod scanner on the built DLL. The result is no capabilities."
+msgstr ""
+
+#: manual/index.md:1
+msgid "Better Key Bindings"
+msgstr ""
+
+#: manual/index.md:3
+msgid "Every key binding in the game's options takes key combinations such as Ctrl + E, and the middle mouse button and mouse buttons 4 and 5. A combination never also triggers a binding on its key alone. The keys the game uses while dragging items can be rebound too."
+msgstr ""
+
+#: manual/index.md:5
+msgid "![Better Key Bindings cover](../attachments/cover.png)"
+msgstr ""
+
+#: manual/index.md:7
+msgid "Binding a combination"
+msgstr ""
+
+#: manual/index.md:9
+msgid "Open the options and click a key binding."
+msgstr ""
+
+#: manual/index.md:10
+msgid "Hold Ctrl, Shift or Alt, in any mix, and press the key or mouse button. The button shows the combination while you hold it."
+msgstr ""
+
+#: manual/index.md:11
+msgid "Let go of every key. Only then is the combination taken, so holding Shift on its way to Shift + Space never counts as Shift alone."
+msgstr ""
+
+#: manual/index.md:12
+msgid "To bind a modifier on its own, such as Left Shift, press it and let go without pressing another key. Holding Ctrl and Left Shift and letting go binds Ctrl + Left Shift."
+msgstr ""
+
+#: manual/index.md:13
+msgid "Press Escape to keep the old binding."
+msgstr ""
+
+#: manual/index.md:14
+msgid "Click **Apply**. Until then nothing is changed."
+msgstr ""
+
+#: manual/index.md:16
+msgid "The middle mouse button and mouse buttons 4 and 5 can be bound like any key, with or without modifiers. The left and right buttons stay with the game."
+msgstr ""
+
+#: manual/index.md:18
+msgid "Combinations and single keys"
+msgstr ""
+
+#: manual/index.md:20
+msgid "When several bindings share a key, the one that asks for the most of the held modifiers wins:"
+msgstr ""
+
+#: manual/index.md:22
+msgid "With E bound to one action and Ctrl + E to another, Ctrl + E runs only the second, and E alone runs only the first."
+msgstr ""
+
+#: manual/index.md:23
+msgid "Shift + E still runs the E binding when nothing is bound to Shift + E, as the game does without the mod."
+msgstr ""
+
+#: manual/index.md:24
+msgid "Ctrl + Shift + E runs a Ctrl + Shift + E binding, and neither the Ctrl + E nor the E binding."
+msgstr ""
+
+#: manual/index.md:26
+msgid "Keys already in use"
+msgstr ""
+
+#: manual/index.md:28
+msgid "Choosing a combination that another binding already uses opens a prompt: **Unbind and use** clears the other binding and gives the combination to this one, and **Cancel** keeps both as they were. The cleared binding shows *None* until you bind it again. Both changes wait for **Apply**."
+msgstr ""
+
+#: manual/index.md:30
+msgid "Bindings that other mods add to the options take combinations too. One exception: two bindings of the same other mod cannot share a key with different modifiers, because that mod reads only the key and could not tell them apart, so that counts as a conflict."
+msgstr ""
+
+#: manual/index.md:32
+msgid "Keys held while dragging"
+msgstr ""
+
+#: manual/index.md:34
+msgid "The mod's own section of the options holds a key the game otherwise fixes:"
+msgstr ""
+
+#: manual/index.md:36
+#: manual/index.md:46
+msgid "Binding"
+msgstr ""
+
+#: manual/index.md:36
+#: manual/index.md:46
+msgid "Game default"
+msgstr ""
+
+#: manual/index.md:36
+#: manual/index.md:46
+msgid "What it does"
+msgstr ""
+
+#: manual/index.md:38
+msgid "Precise placement (hold while moving a selection)"
+msgstr ""
+
+#: manual/index.md:38
+msgid "Shift"
+msgstr ""
+
+#: manual/index.md:38
+msgid "Held while moving several selected items: place them exactly."
+msgstr ""
+
+#: manual/index.md:40
+msgid "It takes combinations and mouse buttons as well. For a modifier key, either side counts."
+msgstr ""
+
+#: manual/index.md:42
+msgid "Deprecated key bindings"
+msgstr ""
+
+#: manual/index.md:44
+msgid "Two more keys the game checks sit in a section of their own, marked deprecated:"
+msgstr ""
+
+#: manual/index.md:48
+msgid "Pick up only one (hold + drag)"
+msgstr ""
+
+#: manual/index.md:48
+msgid "Left Alt"
+msgstr ""
+
+#: manual/index.md:48
+msgid "Held when you start dragging several of an item: pick up just one."
+msgstr ""
+
+#: manual/index.md:49
+msgid "Pick up half (hold + drag)"
+msgstr ""
+
+#: manual/index.md:49
+msgid "Left Shift"
+msgstr ""
+
+#: manual/index.md:49
+msgid "Held when you start dragging several of an item: pick up half of them."
+msgstr ""
+
+#: manual/index.md:51
+msgid "They still work, but nothing in the current game reaches them: they only matter for an item worth several units, and no item the game creates in play has more than one. Their tooltips say so."
+msgstr ""
+
+#: manual/index.md:53
+msgid "Limits"
+msgstr ""
+
+#: manual/index.md:55
+msgid "Two bindings of the same other mod cannot share a key, even with different modifiers."
+msgstr ""
+
+#: manual/index.md:56
+msgid "Turning the mod off keeps each binding's key and drops its modifiers, so Ctrl + E becomes E."
+msgstr ""
+
+#: manual/index.md:57
+msgid "Built for game version 0.46D."
+msgstr ""

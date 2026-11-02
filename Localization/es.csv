@@ -1,0 +1,20 @@
+# Better Key Bindings - Español (es)
+section_hold,Teclas mantenidas al arrastrar
+section_deprecated,Asignaciones obsoletas
+deprecated_note,Obsoleta: ningún objeto del juego actual se puede dividir así, por lo que esta tecla no tiene efecto.
+opt_take_one,Coger solo uno (mantener + arrastrar)
+opt_take_one_tip,Mantenla pulsada al empezar a arrastrar varias unidades de un objeto para coger solo una.
+opt_take_half,Coger la mitad (mantener + arrastrar)
+opt_take_half_tip,Mantenla pulsada al empezar a arrastrar varias unidades de un objeto para coger la mitad.
+opt_precise_place,Colocación precisa (mantener al mover una selección)
+opt_precise_place_tip,Mantenla pulsada al mover varios objetos seleccionados para colocarlos con precisión.
+mod_ctrl,Ctrl
+mod_shift,Mayús
+mod_alt,Alt
+key_mouse_middle,Botón central del ratón
+key_mouse_4,Botón 4 del ratón
+key_mouse_5,Botón 5 del ratón
+conflict_title,Tecla ya en uso
+conflict_body,{0} ya está asignada a «{1}». ¿Quitar la asignación de «{1}» y usar {0} para «{2}»?
+conflict_unbind,Quitar y usar
+conflict_keep,Cancelar

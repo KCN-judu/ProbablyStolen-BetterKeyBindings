@@ -1,0 +1,20 @@
+# Better Key Bindings - 日本語 (ja)
+section_hold,ドラッグ中に押し続けるキー
+section_deprecated,非推奨のキー割り当て
+deprecated_note,非推奨：現在のゲームにはこの方法で分けられるアイテムがないため、このキーは効果がありません。
+opt_take_one,1つだけ持ち上げる（押しながらドラッグ）
+opt_take_one_tip,複数個あるアイテムをドラッグし始めるときに押し続けると、1つだけ持ち上げます。
+opt_take_half,半分を持ち上げる（押しながらドラッグ）
+opt_take_half_tip,複数個あるアイテムをドラッグし始めるときに押し続けると、半分を持ち上げます。
+opt_precise_place,精密配置（選択したアイテムの移動中に押す）
+opt_precise_place_tip,選択した複数のアイテムを動かすときに押し続けると、正確に配置します。
+mod_ctrl,Ctrl
+mod_shift,Shift
+mod_alt,Alt
+key_mouse_middle,マウス中ボタン
+key_mouse_4,マウスボタン4
+key_mouse_5,マウスボタン5
+conflict_title,キーは使用中です
+conflict_body,{0} はすでに「{1}」に割り当てられています。「{1}」の割り当てを解除して、{0} を「{2}」に使いますか？
+conflict_unbind,解除して使う
+conflict_keep,キャンセル

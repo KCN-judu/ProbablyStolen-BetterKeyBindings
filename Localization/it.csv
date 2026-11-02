@@ -1,0 +1,20 @@
+# Better Key Bindings - Italiano (it)
+section_hold,Tasti tenuti premuti durante il trascinamento
+section_deprecated,Assegnazioni deprecate
+deprecated_note,Deprecato: nessun oggetto del gioco attuale si può dividere così, quindi questo tasto non ha effetto.
+opt_take_one,Prendi solo uno (tieni premuto + trascina)
+opt_take_one_tip,Tieni premuto quando inizi a trascinare più unità di un oggetto per prenderne solo una.
+opt_take_half,Prendi metà (tieni premuto + trascina)
+opt_take_half_tip,Tieni premuto quando inizi a trascinare più unità di un oggetto per prenderne metà.
+opt_precise_place,Posizionamento preciso (tieni premuto mentre sposti una selezione)
+opt_precise_place_tip,Tieni premuto mentre sposti più oggetti selezionati per posizionarli con precisione.
+mod_ctrl,Ctrl
+mod_shift,Maiusc
+mod_alt,Alt
+key_mouse_middle,Tasto centrale del mouse
+key_mouse_4,Tasto 4 del mouse
+key_mouse_5,Tasto 5 del mouse
+conflict_title,Tasto già in uso
+conflict_body,{0} è già assegnato a «{1}». Rimuovere l'assegnazione di «{1}» e usare {0} per «{2}»?
+conflict_unbind,Rimuovi e usa
+conflict_keep,Annulla

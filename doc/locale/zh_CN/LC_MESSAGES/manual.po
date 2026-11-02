@@ -1,0 +1,315 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Probably Stolen Mods documentation\n"
+"Report-Msgid-Bugs-To: https://github.com/KCN-judu/ProbablyStolen-Mods/issues\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: conf.json:summary
+msgid "Key combinations, the middle mouse button and mouse buttons 4 and 5 for every key binding, without double triggers."
+msgstr "为每个按键绑定加入组合键、鼠标中键以及鼠标按键 4 和 5，并且不会误触发。"
+
+#: manual/building.md:1
+msgid "Building"
+msgstr "构建"
+
+#: manual/building.md:4
+msgid "Requirements"
+msgstr "需求"
+
+#: manual/building.md:6
+msgid "*Probably Stolen*, game version 0.46D. The build compiles against the game's own assemblies in `Probably Stolen_Data/Managed`."
+msgstr "《深空当铺：可能是偷的》（*Probably Stolen*）游戏版本 0.46D。构建时会引用 `Probably Stolen_Data/Managed` 中的游戏程序集。"
+
+#: manual/building.md:7
+msgid "Git Bash or another POSIX shell on Windows."
+msgstr "Windows 上的 Git Bash 或其他 POSIX shell。"
+
+#: manual/building.md:8
+msgid "Nothing else: the C# 5 compiler that ships with Windows (.NET Framework 4) is enough."
+msgstr "不需要其他东西：Windows 自带的 C# 5 编译器（.NET Framework 4）就够了。"
+
+#: manual/building.md:10
+msgid "Build"
+msgstr "构建"
+
+#: manual/building.md:17
+msgid "Two environment variables override the defaults:"
+msgstr "可以用两个环境变量覆盖默认值："
+
+#: manual/building.md:19
+msgid "Variable"
+msgstr "变量"
+
+#: manual/building.md:19
+msgid "Default"
+msgstr "默认值"
+
+#: manual/building.md:24
+msgid "Install by hand"
+msgstr "手动安装"
+
+#: manual/building.md:26
+msgid "Copy the folder `out/better_key_bindings` into the game's `Mods` folder, start the game, and enable the mod in the Mods menu. Mods load when the game starts, so restart after enabling or updating one."
+msgstr "把 `out/better_key_bindings` 文件夹复制到游戏的 `Mods` 文件夹，启动游戏，并在模组菜单中启用它。模组在游戏启动时加载，所以启用或更新模组后需要重启游戏。"
+
+#: manual/building.md:28
+msgid "The mod declares no capabilities, so the game enables it without a permission prompt."
+msgstr "这个模组没有声明任何权限，所以游戏启用它时不会弹出权限提示。"
+
+#: manual/building.md:30
+msgid "Translations"
+msgstr "翻译"
+
+#: manual/building.md:32
+msgid "The mod's text is in `Localization/`, one file per game language, named by the game's locale code: `en`, `zh`, `ja`, `ko`, `de`, `fr`, `es`, `it`, `pl`, `ru` and `ptBR`. A missing line falls back to English."
+msgstr "模组的文字位于 `Localization/`，游戏的每种语言一个文件，文件名是游戏的语言代码：`en`、`zh`、`ja`、`ko`、`de`、`fr`、`es`、`it`、`pl`、`ru` 和 `ptBR`。缺少的条目会回退到英文。"
+
+#: manual/how-it-works.md:1
+msgid "How it works"
+msgstr "工作原理"
+
+#: manual/how-it-works.md:3
+msgid "The game stores one key per binding. The mod keeps the modifiers of each binding next to it, and changes the places where the game reads a binding."
+msgstr "游戏为每个绑定只保存一个按键。模组在旁边另外保存每个绑定的修饰键，并修改游戏读取绑定的地方。"
+
+#: manual/how-it-works.md:5
+msgid "Storing a binding"
+msgstr "保存绑定"
+
+#: manual/how-it-works.md:7
+msgid "The key stays in the game's own key binding store, so the game saves it as before. The modifiers go to separate player preferences, one per binding. The three dragging keys are stored by the mod, key and modifiers together."
+msgstr "按键仍保存在游戏自己的按键绑定中，由游戏像以前一样保存。修饰键单独保存在玩家偏好设置里，每个绑定一项。三个拖动按键由模组保存，按键和修饰键存在一起。"
+
+#: manual/how-it-works.md:9
+msgid "Modifiers do not care about the side: Ctrl means either Ctrl key, or Cmd on a Mac keyboard. Shift and Alt work the same way."
+msgstr "修饰键不区分左右：Ctrl 指任意一个 Ctrl 键，在 Mac 键盘上也包括 Cmd。Shift 和 Alt 同理。"
+
+#: manual/how-it-works.md:11
+msgid "Reading a binding"
+msgstr "读取绑定"
+
+#: manual/how-it-works.md:13
+msgid "Bindings are read in four ways, and each one is covered:"
+msgstr "绑定有四种读取方式，每一种都已处理："
+
+#: manual/how-it-works.md:15
+msgid "**Pressed or held checks** (toolbox slots, the bell, trash, options, control hints, quick move): the mod answers these checks itself, with the modifiers taken into account."
+msgstr "**按下或按住的检查**（工具箱栏位、铃铛、丢弃、选项、操作提示、快速移动）：由模组自己回答这些检查，并考虑修饰键。"
+
+#: manual/how-it-works.md:16
+msgid "**Item and dialogue handlers** compare the pressed keys with the binding's key. While such a handler handles a key press, a binding that may not fire reads as unbound, so two bindings on one key stay apart. Key releases keep the plain key, so letting go of a modifier first never leaves an action stuck."
+msgstr "**物品和对话处理器**会把按下的键与绑定的按键比较。处理器处理按键按下时，不应触发的绑定会被视为未绑定，所以同一按键上的两个绑定互不干扰。松开按键时仍使用原来的按键，所以先松开修饰键也不会让操作卡住。"
+
+#: manual/how-it-works.md:17
+msgid "**Other mods' bindings**: those mods read their key straight from the engine. When such a read finds the key pressed, the mod checks who is asking: a read by the mod that owns the binding counts only if the binding may fire. The game's own direct key reads are left alone."
+msgstr "**其他模组的绑定**：这些模组直接从引擎读取按键。当这样的读取发现按键被按下时，模组会检查是谁在读：只有拥有这个绑定的模组读取时，并且这个绑定应当触发，才算按下。游戏自己直接读取按键的地方不受影响。"
+
+#: manual/how-it-works.md:18
+msgid "**Dragging keys** that the game checks directly (Left Alt and Left Shift when a drag starts, Shift for precise placement) are redirected to the mod's own bindings."
+msgstr "游戏直接检查的**拖动按键**（开始拖动时的左 Alt 和左 Shift，精确放置时的 Shift）会改为读取模组自己的绑定。"
+
+#: manual/how-it-works.md:20
+msgid "A binding may fire when its key is pressed, its modifiers are held, and no other binding on the same key asks for more of the held modifiers. The rule lives in `src/Rule.cs`, and `tests/RuleTest.cs` checks it."
+msgstr "一个绑定在以下情况下才会触发：它的按键被按下，它的修饰键都被按住，并且同一按键上没有其他绑定要求更多正被按住的修饰键。这条规则位于 `src/Rule.cs`，由 `tests/RuleTest.cs` 检查。"
+
+#: manual/how-it-works.md:22
+msgid "The options window"
+msgstr "选项窗口"
+
+#: manual/how-it-works.md:24
+msgid "While a binding waits for a key, the mod takes over the game's key capture. Nothing is taken while keys are down: the button shows the combination so far, and the binding is decided once every key pressed since the capture began is released. The last key or mouse button that is not a modifier becomes the main key, with the modifiers held when it went down. When only modifiers were pressed, the last of them becomes the main key and the others its modifiers."
+msgstr "绑定等待按键时，由模组接管游戏的按键捕获。按键按住期间不做任何判定：按钮上显示目前的组合，等捕获开始后按下的所有键都松开时才确定绑定。最后按下的非修饰键（按键或鼠标按键）成为主键，并带上它按下时按住的修饰键。如果只按了修饰键，最后按下的那个成为主键，其余的作为它的修饰键。"
+
+#: manual/how-it-works.md:26
+msgid "Conflicts are checked against every key binding in the window, including the ones not yet applied. The dragging keys only conflict with each other, because they are held during a drag while the other bindings are pressed."
+msgstr "冲突检查会对照窗口中的所有按键绑定，包括尚未应用的更改。拖动按键只会彼此冲突，因为它们是在拖动时按住的，而其他绑定是按下触发的。"
+
+#: manual/how-it-works.md:28
+msgid "Interface"
+msgstr "界面"
+
+#: manual/how-it-works.md:30
+msgid "Everything the mod shows comes from the game's own UI assets. The option rows are the game's key binding entries. The unbind prompt is built with the game's own window builder, which creates the game's window, label and button prefabs, in the same style as the options window. The mod draws nothing itself, so a texture pack that restyles those game assets restyles the mod too."
+msgstr "模组显示的所有内容都来自游戏自带的 UI 资源。选项中的各行就是游戏自己的按键绑定条目。解绑提示用游戏自带的窗口构建器生成，它会创建游戏的窗口、文字和按钮预制体，风格与选项窗口一致。模组本身不绘制任何东西，所以修改这些游戏资源的材质包也会一并作用于模组。"
+
+#: manual/how-it-works.md:32
+msgid "Tests"
+msgstr "测试"
+
+#: manual/how-it-works.md:34
+msgid "`tests/RuleTest.cs` runs the firing rule on combinations such as E against Ctrl + E."
+msgstr "`tests/RuleTest.cs` 用 E 与 Ctrl + E 这样的组合检验触发规则。"
+
+#: manual/how-it-works.md:35
+msgid "`tests/ScanTest.cs` runs the game's own mod scanner on the built DLL. The result is no capabilities."
+msgstr "`tests/ScanTest.cs` 对构建出的 DLL 运行游戏自带的模组扫描器，结果是不需要任何权限。"
+
+#: manual/index.md:1
+msgid "Better Key Bindings"
+msgstr "按键绑定增强"
+
+#: manual/index.md:3
+msgid "Every key binding in the game's options takes key combinations such as Ctrl + E, and the middle mouse button and mouse buttons 4 and 5. A combination never also triggers a binding on its key alone. The keys the game uses while dragging items can be rebound too."
+msgstr "游戏选项中的每个按键绑定都可以使用 Ctrl + E 这样的组合键，以及鼠标中键和鼠标按键 4、5。组合键不会同时触发只绑定了其主键的绑定。游戏拖动物品时使用的按键也可以重新绑定。"
+
+#: manual/index.md:5
+msgid "![Better Key Bindings cover](../attachments/cover.png)"
+msgstr "![按键绑定增强封面](../attachments/cover.png)"
+
+#: manual/index.md:7
+msgid "Binding a combination"
+msgstr "绑定组合键"
+
+#: manual/index.md:9
+msgid "Open the options and click a key binding."
+msgstr "打开选项，点击一个按键绑定。"
+
+#: manual/index.md:10
+msgid "Hold Ctrl, Shift or Alt, in any mix, and press the key or mouse button. The button shows the combination while you hold it."
+msgstr "按住 Ctrl、Shift 或 Alt（可任意组合），再按下按键或鼠标按键。按住期间，按钮上会显示当前的组合。"
+
+#: manual/index.md:11
+msgid "Let go of every key. Only then is the combination taken, so holding Shift on its way to Shift + Space never counts as Shift alone."
+msgstr "松开所有按键。只有这时才会确定组合，所以为了按 Shift + 空格而先按住的 Shift 不会被当成单独的 Shift。"
+
+#: manual/index.md:12
+msgid "To bind a modifier on its own, such as Left Shift, press it and let go without pressing another key. Holding Ctrl and Left Shift and letting go binds Ctrl + Left Shift."
+msgstr "要单独绑定一个修饰键（例如左 Shift），按下后直接松开，不要按其他键。同时按住 Ctrl 和左 Shift 再松开，会绑定为 Ctrl + 左 Shift。"
+
+#: manual/index.md:13
+msgid "Press Escape to keep the old binding."
+msgstr "按 Esc 保留原来的绑定。"
+
+#: manual/index.md:14
+msgid "Click **Apply**. Until then nothing is changed."
+msgstr "点击 **应用**（Apply）。在此之前不会有任何改动。"
+
+#: manual/index.md:16
+msgid "The middle mouse button and mouse buttons 4 and 5 can be bound like any key, with or without modifiers. The left and right buttons stay with the game."
+msgstr "鼠标中键和鼠标按键 4、5 可以像普通按键一样绑定，也可以搭配修饰键。鼠标左键和右键仍归游戏使用。"
+
+#: manual/index.md:18
+msgid "Combinations and single keys"
+msgstr "组合键与单键"
+
+#: manual/index.md:20
+msgid "When several bindings share a key, the one that asks for the most of the held modifiers wins:"
+msgstr "当多个绑定共用一个按键时，要求正被按住的修饰键最多的那个绑定生效："
+
+#: manual/index.md:22
+msgid "With E bound to one action and Ctrl + E to another, Ctrl + E runs only the second, and E alone runs only the first."
+msgstr "E 绑定一个操作、Ctrl + E 绑定另一个操作时，按 Ctrl + E 只执行后者，单独按 E 只执行前者。"
+
+#: manual/index.md:23
+msgid "Shift + E still runs the E binding when nothing is bound to Shift + E, as the game does without the mod."
+msgstr "如果 Shift + E 没有绑定任何操作，按 Shift + E 仍会执行 E 的绑定，与没有模组时一样。"
+
+#: manual/index.md:24
+msgid "Ctrl + Shift + E runs a Ctrl + Shift + E binding, and neither the Ctrl + E nor the E binding."
+msgstr "按 Ctrl + Shift + E 会执行 Ctrl + Shift + E 的绑定，不会执行 Ctrl + E 或 E 的绑定。"
+
+#: manual/index.md:26
+msgid "Keys already in use"
+msgstr "已被占用的按键"
+
+#: manual/index.md:28
+msgid "Choosing a combination that another binding already uses opens a prompt: **Unbind and use** clears the other binding and gives the combination to this one, and **Cancel** keeps both as they were. The cleared binding shows *None* until you bind it again. Both changes wait for **Apply**."
+msgstr "选择一个已被其他绑定使用的组合时，会弹出提示：**解绑并使用**会清除另一个绑定，并把这个组合给当前绑定；**取消**则让两者保持原样。被清除的绑定会显示为*无*，直到你重新绑定它。两项更改都要点击 **应用** 后才生效。"
+
+#: manual/index.md:30
+msgid "Bindings that other mods add to the options take combinations too. One exception: two bindings of the same other mod cannot share a key with different modifiers, because that mod reads only the key and could not tell them apart, so that counts as a conflict."
+msgstr "其他模组添加到选项里的按键绑定同样支持组合键。只有一个例外：同一个其他模组的两个绑定不能使用相同的主键、只靠修饰键区分，因为那个模组只读取主键，分不清是哪个绑定，所以这种情况算作冲突。"
+
+#: manual/index.md:32
+msgid "Keys held while dragging"
+msgstr "拖动时按住的键"
+
+#: manual/index.md:34
+msgid "The mod's own section of the options holds a key the game otherwise fixes:"
+msgstr "模组在选项中的分区包含一个原本由游戏固定的按键："
+
+#: manual/index.md:36
+#: manual/index.md:46
+msgid "Binding"
+msgstr "绑定"
+
+#: manual/index.md:36
+#: manual/index.md:46
+msgid "Game default"
+msgstr "游戏默认"
+
+#: manual/index.md:36
+#: manual/index.md:46
+msgid "What it does"
+msgstr "作用"
+
+#: manual/index.md:38
+msgid "Precise placement (hold while moving a selection)"
+msgstr "精确放置（移动选中物品时按住）"
+
+#: manual/index.md:38
+msgid "Shift"
+msgstr "Shift"
+
+#: manual/index.md:38
+msgid "Held while moving several selected items: place them exactly."
+msgstr "移动多个选中的物品时按住：精确放置它们。"
+
+#: manual/index.md:40
+msgid "It takes combinations and mouse buttons as well. For a modifier key, either side counts."
+msgstr "它同样支持组合键和鼠标按键。对于修饰键，左右两侧都有效。"
+
+#: manual/index.md:42
+msgid "Deprecated key bindings"
+msgstr "已弃用的按键绑定"
+
+#: manual/index.md:44
+msgid "Two more keys the game checks sit in a section of their own, marked deprecated:"
+msgstr "游戏检查的另外两个按键放在单独的分区里，标记为已弃用："
+
+#: manual/index.md:48
+msgid "Pick up only one (hold + drag)"
+msgstr "只拿起一个（按住并拖动）"
+
+#: manual/index.md:48
+msgid "Left Alt"
+msgstr "左 Alt"
+
+#: manual/index.md:48
+msgid "Held when you start dragging several of an item: pick up just one."
+msgstr "开始拖动多个同种物品时按住：只拿起一个。"
+
+#: manual/index.md:49
+msgid "Pick up half (hold + drag)"
+msgstr "拿起一半（按住并拖动）"
+
+#: manual/index.md:49
+msgid "Left Shift"
+msgstr "左 Shift"
+
+#: manual/index.md:49
+msgid "Held when you start dragging several of an item: pick up half of them."
+msgstr "开始拖动多个同种物品时按住：拿起一半。"
+
+#: manual/index.md:51
+msgid "They still work, but nothing in the current game reaches them: they only matter for an item worth several units, and no item the game creates in play has more than one. Their tooltips say so."
+msgstr "它们仍然可以使用，但当前游戏中没有任何东西会用到：只有代表多个单位的物品才受影响，而游戏在正常游玩中生成的物品都只有一个单位。它们的提示中也有说明。"
+
+#: manual/index.md:53
+msgid "Limits"
+msgstr "限制"
+
+#: manual/index.md:55
+msgid "Two bindings of the same other mod cannot share a key, even with different modifiers."
+msgstr "同一个其他模组的两个绑定不能共用一个主键，即使修饰键不同。"
+
+#: manual/index.md:56
+msgid "Turning the mod off keeps each binding's key and drops its modifiers, so Ctrl + E becomes E."
+msgstr "停用模组后，每个绑定保留其主键并去掉修饰键，所以 Ctrl + E 会变成 E。"
+
+#: manual/index.md:57
+msgid "Built for game version 0.46D."
+msgstr "适用于游戏版本 0.46D。"

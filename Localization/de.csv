@@ -1,0 +1,20 @@
+# Better Key Bindings - Deutsch (de)
+section_hold,Beim Ziehen gehaltene Tasten
+section_deprecated,Veraltete Tastenbelegungen
+deprecated_note,Veraltet: Im aktuellen Spiel lässt sich kein Gegenstand so aufteilen, daher hat diese Taste keine Wirkung.
+opt_take_one,Nur einen aufnehmen (halten + ziehen)
+opt_take_one_tip,Beim Ziehen mehrerer gleicher Gegenstände gedrückt halten, um nur einen aufzunehmen.
+opt_take_half,Hälfte aufnehmen (halten + ziehen)
+opt_take_half_tip,Beim Ziehen mehrerer gleicher Gegenstände gedrückt halten, um die Hälfte aufzunehmen.
+opt_precise_place,Genaues Platzieren (beim Verschieben einer Auswahl halten)
+opt_precise_place_tip,Beim Verschieben mehrerer ausgewählter Gegenstände gedrückt halten, um sie genau zu platzieren.
+mod_ctrl,Strg
+mod_shift,Umschalt
+mod_alt,Alt
+key_mouse_middle,Mittlere Maustaste
+key_mouse_4,Maustaste 4
+key_mouse_5,Maustaste 5
+conflict_title,Taste bereits belegt
+conflict_body,{0} ist bereits „{1}“ zugewiesen. Zuweisung von „{1}“ aufheben und {0} für „{2}“ verwenden?
+conflict_unbind,Aufheben und verwenden
+conflict_keep,Abbrechen

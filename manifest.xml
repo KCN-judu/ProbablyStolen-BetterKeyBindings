@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Manifest>
+  <ID>better_key_bindings</ID>
+  <Name>Better Key Bindings</Name>
+  <Author>KCN-judu</Author>
+  <ModVersion>1.0.0</ModVersion>
+  <Description>Every key binding in the options menu takes key combinations such as Ctrl + E, and the middle mouse button and mouse buttons 4 and 5. A combination never also triggers the binding on its key alone. The key the game hard-codes for precise placement becomes a binding too. Choosing a key that is already in use asks whether to unbind the other binding.</Description>
+  <GameVersions>
+    <Version>0.46D</Version>
+  </GameVersions>
+  <Prerequisites />
+  <Assemblies>
+    <Assembly>BetterKeyBindings.dll</Assembly>
+  </Assemblies>
+  <Capabilities />
+</Manifest>
