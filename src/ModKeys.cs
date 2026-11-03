@@ -12,8 +12,9 @@ namespace BetterKeyBindings
     //
     // Those mods store a single key and read it themselves with Input.GetKeyDown / Input.GetKey. The modifiers of
     // their bindings are kept here, and when one of those reads comes back true for a key such a binding uses, the
-    // reading assembly decides: a read by the mod that owns the binding counts only if the binding may fire (see
-    // Rule), any other read is left alone. The game's own direct reads are never touched. Releases are not gated.
+    // reading assembly decides: a read by the mod that owns the binding counts only if the press belongs to that
+    // binding (see Consume.OwnersOf), any other read is left alone. The game's own direct reads are never touched.
+    // Releases are not gated.
     public static class ModKeys
     {
         const string ModsPref = "BetterKeyBindings.optmods.";
@@ -72,7 +73,7 @@ namespace BetterKeyBindings
 
         public static void MarkDirty() { dirty = true; }
 
-        // Modifiers of the other mods' bindings on a key, as competitors of the game's bindings.
+        // Modifiers of the other mods' bindings on a key, to decide whom a press belongs to.
         public static void AddCompetitors(KeyCode key, List<int> into)
         {
             Refresh();
@@ -105,7 +106,7 @@ namespace BetterKeyBindings
 
         static void ReadPostfix(KeyCode key, ref bool __result)
         {
-            if (!__result || checking) return;
+            if (!__result || checking || Consume.Raw) return;
             checking = true;
             try
             {
@@ -120,7 +121,7 @@ namespace BetterKeyBindings
                     if (b.Owner != caller) continue;
                     if (!owns && seen.Add(caller)) Debug.Log(BetterKeyBindingsMod.Tag + "checking key combinations for " + caller.GetName().Name);
                     owns = true;
-                    if (MayFire(b)) return;
+                    if (MayTrigger(b)) return;
                 }
                 if (owns) __result = false;
             }
@@ -131,14 +132,7 @@ namespace BetterKeyBindings
             finally { checking = false; }
         }
 
-        static bool MayFire(Binding b)
-        {
-            int held = Combo.Held(b.Key);
-            var others = new List<int>();
-            foreach (var o in byKey[b.Key]) if (o != b) others.Add(o.Mods);
-            Bindings.AddCompetitors(b.Key, others);
-            return Rule.MayFire(b.Mods, held, others.ToArray());
-        }
+        static bool MayTrigger(Binding b) { return Consume.MayTrigger(b.Key, b.Mods); }
 
         // The first assembly up the stack that is not this mod, Harmony or the engine: whoever asked for the key.
         static Assembly Caller()

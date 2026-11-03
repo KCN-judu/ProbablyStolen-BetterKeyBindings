@@ -6,8 +6,9 @@ namespace BetterKeyBindings
 {
     // Key combinations for the game's key bindings.
     //
-    // Every binding in the options menu takes Ctrl, Shift and Alt combinations, and the middle mouse button and
-    // mouse buttons 4 and 5. A combination never also fires a binding on its main key alone (see Bindings).
+    // Every binding in the options menu takes Ctrl, Shift and Alt combinations, the middle mouse button, mouse
+    // buttons 4 and 5, and the mouse wheel. While a binding waits for a key, nothing else gets the
+    // input (see Consume). A combination never also triggers a binding on its main key alone (see Bindings).
     // The keys the game hard-codes while dragging and placing items become bindings of their own. A combination
     // already in use asks whether to unbind the other binding (see Options). Bindings that other mods add to the
     // options take combinations too (see ModKeys).
@@ -37,6 +38,7 @@ namespace BetterKeyBindings
                     Bindings.Patch(harmony);
                     Options.Patch(harmony, modId);
                     ModKeys.Patch(harmony);
+                    Consume.Patch(harmony);
                 }
                 catch (Exception e)
                 {
@@ -54,6 +56,7 @@ namespace BetterKeyBindings
         {
             if (harmony != null) { harmony.UnpatchAll(HarmonyId); harmony = null; }
             Options.Reset();
+            Consume.Reset();
         }
 
         internal static string L(string key, params object[] args)

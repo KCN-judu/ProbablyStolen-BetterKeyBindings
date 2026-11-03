@@ -14,6 +14,8 @@ mod_alt,Alt
 key_mouse_middle,Middle Mouse
 key_mouse_4,Mouse 4
 key_mouse_5,Mouse 5
+key_wheel_up,Wheel Up
+key_wheel_down,Wheel Down
 conflict_title,Key already in use
 conflict_body,{0} is already bound to {1}. Unbind {1} and use {0} for {2}?
 conflict_unbind,Unbind and use

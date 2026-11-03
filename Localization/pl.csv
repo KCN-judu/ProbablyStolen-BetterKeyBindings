@@ -14,6 +14,8 @@ mod_alt,Alt
 key_mouse_middle,Środkowy przycisk myszy
 key_mouse_4,Przycisk myszy 4
 key_mouse_5,Przycisk myszy 5
+key_wheel_up,Kółko myszy w górę
+key_wheel_down,Kółko myszy w dół
 conflict_title,Klawisz jest już używany
 conflict_body,{0} jest już przypisany do „{1}”. Usunąć przypisanie „{1}” i użyć {0} dla „{2}”?
 conflict_unbind,Usuń i użyj

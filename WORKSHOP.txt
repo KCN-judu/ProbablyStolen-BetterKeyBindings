@@ -1,10 +1,18 @@
 [h1]Better Key Bindings[/h1]
-Bind Ctrl + E, Shift + Mouse 4 or the middle mouse button to any action, without the plain key firing as well.
+Bind Ctrl + E, Shift + Mouse 4, the middle mouse button or the mouse wheel to any action, without the plain key triggering as well.
+
+[h2]What's new in 1.1.0[/h2]
+[list]
+[*][b]Mouse wheel[/b]: wheel up and wheel down can be bound, alone or with modifiers (Ctrl + wheel up). One notch triggers once, and a notch that goes to a binding does not also scroll.
+[*]While a binding waits for a key, what you press goes only to that binding: Space does not press a button and the wheel does not scroll the list.
+[*]A press is decided once, as it goes down: the exact combination first, else the bindings with the most of the held modifiers, else the game gets it untouched.
+[*]Rotate, flip and reset only take a key while you drag an item, so elsewhere the wheel still scrolls.
+[/list]
 
 [h2]What it adds[/h2]
 [list]
 [*]Every key binding in the options takes [b]Ctrl, Shift and Alt combinations[/b]. Hold the modifiers and press the key.
-[*][b]Middle mouse button and mouse buttons 4 and 5[/b] can be bound like any key, with or without modifiers.
+[*][b]Middle mouse button, mouse buttons 4 and 5 and the mouse wheel[/b] can be bound like any key, with or without modifiers.
 [*][b]No double triggers[/b]: with E on one action and Ctrl + E on another, Ctrl + E runs only the second.
 [*][b]Conflict prompt[/b]: choosing a key that is already in use asks whether to unbind the other binding.
 [*]The key the game fixes for [b]precise placement[/b] (Shift) becomes a binding.
@@ -31,12 +39,20 @@ Bug reports and suggestions are welcome on GitHub or in the comments.
 [hr][/hr]
 
 [h1]按键绑定增强[/h1]
-把 Ctrl + E、Shift + 鼠标按键 4 或鼠标中键绑定到任何操作，而且不会顺带触发单键绑定。
+把 Ctrl + E、Shift + 鼠标按键 4、鼠标中键或鼠标滚轮绑定到任何操作，而且不会顺带触发单键绑定。
+
+[h2]1.1.0 新内容[/h2]
+[list]
+[*][b]鼠标滚轮[/b]：滚轮向上、向下可以单独绑定，也可以搭配修饰键（Ctrl + 滚轮向上）。滚一格只触发一次，交给绑定的那一格不会同时滚动。
+[*]绑定等待按键时，你按下的键只交给这个绑定：空格不会按下按钮，滚轮也不会滚动列表。
+[*]一次按下只在按下时判定一次：先找完全一致的组合，再找修饰键保留最多的绑定，都没有就原样交给游戏。
+[*]旋转、翻转和复位只在拖动物品时占用按键，其他时候滚轮照常滚动。
+[/list]
 
 [h2]新增功能[/h2]
 [list]
 [*]选项中的每个按键绑定都支持 [b]Ctrl、Shift、Alt 组合键[/b]：按住修饰键再按主键即可。
-[*][b]鼠标中键、鼠标按键 4 和 5[/b] 可以像普通按键一样绑定，也可以搭配修饰键。
+[*][b]鼠标中键、鼠标按键 4 和 5、鼠标滚轮[/b]可以像普通按键一样绑定，也可以搭配修饰键。
 [*][b]不会误触发[/b]：E 绑定一个操作、Ctrl + E 绑定另一个操作时，按 Ctrl + E 只会执行后者。
 [*][b]冲突提示[/b]：选择已被占用的按键时，会询问是否解除原有绑定。
 [*]游戏写死的[b]精确放置[/b]键（Shift）变成可绑定项。

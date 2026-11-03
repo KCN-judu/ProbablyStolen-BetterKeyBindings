@@ -14,6 +14,8 @@ mod_alt,Alt
 key_mouse_middle,鼠标中键
 key_mouse_4,鼠标按键 4
 key_mouse_5,鼠标按键 5
+key_wheel_up,鼠标滚轮向上
+key_wheel_down,鼠标滚轮向下
 conflict_title,按键已被占用
 conflict_body,{0} 已绑定到“{1}”。要解除“{1}”的绑定，并把 {0} 用于“{2}”吗？
 conflict_unbind,解绑并使用

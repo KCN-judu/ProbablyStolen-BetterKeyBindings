@@ -11,8 +11,9 @@ namespace BetterKeyBindings
     //
     // While a binding waits for a key, nothing is taken until every key pressed is released; the button shows the
     // combination meanwhile. Ctrl, Shift and Alt held when the main key went down become part of the binding, and
-    // modifiers pressed with no other key make the last of them the binding itself. The middle mouse button and
-    // mouse buttons 4 and 5 count as keys too.
+    // modifiers pressed with no other key make the last of them the binding itself. The middle mouse button, mouse
+    // buttons 4 and 5 and the wheel count as keys too; a wheel notch is released the frame after it, so Ctrl + wheel
+    // up is taken once Ctrl is let go. The keys held while dragging take no wheel, since a notch cannot be held.
     // A combination already used by another binding asks whether to unbind that one. Everything stays pending, like
     // the game's own key choices, until Apply.
     // Bindings added by other mods take combinations as well: their modifiers are kept and checked by ModKeys.
@@ -39,7 +40,7 @@ namespace BetterKeyBindings
         static readonly Capture capture = new Capture();
         static int lastPollFrame = -1;
         static string shownText;
-        static KeyCode[] keys;
+        static KeyCode[] keys, keysWithWheel;
 
         sealed class Conflict { public string Id, Owner; public KeyCode Key; public int Mods; }
         static Conflict conflict;
@@ -158,15 +159,20 @@ namespace BetterKeyBindings
             return pendingKeysField == null ? null : pendingKeysField.GetValue(ui) as Dictionary<string, KeyCode>;
         }
 
-        static KeyCode[] CaptureKeys()
+        static KeyCode[] CaptureKeys(bool wheel)
         {
-            if (keys != null) return keys;
+            if (keys == null) keys = BuildCaptureKeys();
+            if (!wheel) return keys;
+            return keysWithWheel ?? (keysWithWheel = keys.Concat(Combo.WheelKeys).ToArray());
+        }
+
+        static KeyCode[] BuildCaptureKeys()
+        {
             var list = Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>()
                 .Where(k => k != KeyCode.None && k != KeyCode.Escape && (int)k < (int)KeyCode.Mouse0)
                 .Concat(Combo.MouseKeys).Distinct().ToList();
             // Modifiers last, so a key pressed in the same frame as its modifier is the main key.
-            keys = list.Where(k => !Combo.IsModifier(k)).Concat(list.Where(Combo.IsModifier)).ToArray();
-            return keys;
+            return list.Where(k => !Combo.IsModifier(k)).Concat(list.Where(Combo.IsModifier)).ToArray();
         }
 
         static void Call(MethodInfo m, GameOptionUIManager ui, params object[] args)
@@ -182,6 +188,8 @@ namespace BetterKeyBindings
             int frame = Time.frameCount;
             if (frame == lastPollFrame) return false;
             lastPollFrame = frame;
+            // The capture reads the real input; everyone else is kept from it meanwhile (see Consume).
+            Consume.BeginRaw();
             try { Poll(__instance); }
             catch (Exception e)
             {
@@ -189,6 +197,7 @@ namespace BetterKeyBindings
                 Call(setStatus, __instance, "");
                 Call(endCapture, __instance);
             }
+            finally { Consume.EndRaw(); }
             return false;
         }
 
@@ -208,8 +217,8 @@ namespace BetterKeyBindings
 
             // Nothing is decided while keys are down: the button shows the combination so far, and the binding is
             // taken once every key pressed since the capture began is released.
-            foreach (var k in CaptureKeys())
-                if (Input.GetKeyDown(k)) capture.Down((int)k, Combo.GroupOf(k), Combo.Held(k));
+            foreach (var k in CaptureKeys(HoldOf(id) == null))
+                if (Input.GetKeyDown(k)) { capture.Down((int)k, Combo.GroupOf(k), Combo.Held(k)); Consume.Captured(k); }
             if (!capture.Started) return;
 
             bool anyDown = false;

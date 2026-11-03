@@ -8,8 +8,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: conf.json:summary
-msgid "Key combinations, the middle mouse button and mouse buttons 4 and 5 for every key binding, without double triggers."
-msgstr "为每个按键绑定加入组合键、鼠标中键以及鼠标按键 4 和 5，并且不会误触发。"
+msgid "Key combinations, the middle mouse button, mouse buttons 4 and 5 and the mouse wheel for every key binding, without double triggers."
+msgstr "为每个按键绑定加入组合键、鼠标中键、鼠标按键 4 和 5 以及鼠标滚轮，并且不会误触发。"
 
 #: manual/building.md:1
 msgid "Building"
@@ -92,74 +92,110 @@ msgid "The key stays in the game's own key binding store, so the game saves it a
 msgstr "按键仍保存在游戏自己的按键绑定中，由游戏像以前一样保存。修饰键单独保存在玩家偏好设置里，每个绑定一项。三个拖动按键由模组保存，按键和修饰键存在一起。"
 
 #: manual/how-it-works.md:9
+msgid "The mouse wheel has no key code in the engine, so wheel up and wheel down get two numbers above all of the engine's keys. The game stores them like any other key."
+msgstr "鼠标滚轮在引擎中没有按键代码，所以滚轮向上和滚轮向下使用比引擎所有按键都大的两个编号。游戏会像保存其他按键一样保存它们。"
+
+#: manual/how-it-works.md:11
 msgid "Modifiers do not care about the side: Ctrl means either Ctrl key, or Cmd on a Mac keyboard. Shift and Alt work the same way."
 msgstr "修饰键不区分左右：Ctrl 指任意一个 Ctrl 键，在 Mac 键盘上也包括 Cmd。Shift 和 Alt 同理。"
 
-#: manual/how-it-works.md:11
+#: manual/how-it-works.md:13
 msgid "Reading a binding"
 msgstr "读取绑定"
 
-#: manual/how-it-works.md:13
+#: manual/how-it-works.md:15
 msgid "Bindings are read in four ways, and each one is covered:"
 msgstr "绑定有四种读取方式，每一种都已处理："
 
-#: manual/how-it-works.md:15
+#: manual/how-it-works.md:17
 msgid "**Pressed or held checks** (toolbox slots, the bell, trash, options, control hints, quick move): the mod answers these checks itself, with the modifiers taken into account."
 msgstr "**按下或按住的检查**（工具箱栏位、铃铛、丢弃、选项、操作提示、快速移动）：由模组自己回答这些检查，并考虑修饰键。"
 
-#: manual/how-it-works.md:16
-msgid "**Item and dialogue handlers** compare the pressed keys with the binding's key. While such a handler handles a key press, a binding that may not fire reads as unbound, so two bindings on one key stay apart. Key releases keep the plain key, so letting go of a modifier first never leaves an action stuck."
+#: manual/how-it-works.md:18
+msgid "**Item and dialogue handlers** compare the pressed keys with the binding's key. While such a handler handles a key press, a binding that may not trigger reads as unbound, so two bindings on one key stay apart. Key releases keep the plain key, so letting go of a modifier first never leaves an action stuck."
 msgstr "**物品和对话处理器**会把按下的键与绑定的按键比较。处理器处理按键按下时，不应触发的绑定会被视为未绑定，所以同一按键上的两个绑定互不干扰。松开按键时仍使用原来的按键，所以先松开修饰键也不会让操作卡住。"
 
-#: manual/how-it-works.md:17
-msgid "**Other mods' bindings**: those mods read their key straight from the engine. When such a read finds the key pressed, the mod checks who is asking: a read by the mod that owns the binding counts only if the binding may fire. The game's own direct key reads are left alone."
+#: manual/how-it-works.md:19
+msgid "**Other mods' bindings**: those mods read their key straight from the engine. When such a read finds the key pressed, the mod checks who is asking: a read by the mod that owns the binding counts only if the binding may trigger. The game's own direct key reads are left alone."
 msgstr "**其他模组的绑定**：这些模组直接从引擎读取按键。当这样的读取发现按键被按下时，模组会检查是谁在读：只有拥有这个绑定的模组读取时，并且这个绑定应当触发，才算按下。游戏自己直接读取按键的地方不受影响。"
 
-#: manual/how-it-works.md:18
+#: manual/how-it-works.md:20
 msgid "**Dragging keys** that the game checks directly (Left Alt and Left Shift when a drag starts, Shift for precise placement) are redirected to the mod's own bindings."
 msgstr "游戏直接检查的**拖动按键**（开始拖动时的左 Alt 和左 Shift，精确放置时的 Shift）会改为读取模组自己的绑定。"
 
-#: manual/how-it-works.md:20
-msgid "A binding may fire when its key is pressed, its modifiers are held, and no other binding on the same key asks for more of the held modifiers. The rule lives in `src/Rule.Pure.cs`."
-msgstr "一个绑定在以下情况下才会触发：它的按键被按下，它的修饰键都被按住，并且同一按键上没有其他绑定要求更多正被按住的修饰键。这条规则位于 `src/Rule.Pure.cs`。"
-
 #: manual/how-it-works.md:22
+msgid "Whom a press belongs to is decided once, the first time it is seen going down, with the modifiers held then, among the bindings that apply where the player is: the bindings on that key asking for exactly those modifiers, else the ones asking for the most of them (several at once when they ask for as many), else nobody, and the press goes to the game untouched. Every read of a binding during the press only asks this answer, so the press stays with the same bindings until the key is up. Rotating, flipping and resetting an item only apply while an item is dragged, which the game shows in a public state; every other binding applies everywhere, since the game decides inside each action, from many private states, whether it does anything. So a press is decided completely when it goes down, and nothing is watched or handed back afterwards. The rule lives in `src/Rule.Pure.cs`, the record of each press in `src/Consume.cs`."
+msgstr "一次按下归谁，只在第一次看到它按下时判定一次，依据的是当时按住的修饰键，并且只在玩家当前场景适用的绑定中判定：先找这个键上修饰键完全一致的绑定；找不到就找要求的修饰键最多的那些绑定，一样多时几个一起；还找不到就不归任何绑定，这次按下原样交给游戏。按住期间每次读取绑定都只看这个结果，所以直到松开为止，这次按下都归同一组绑定。旋转、翻转和复位物品只在拖动物品时适用，这一点游戏通过公开状态提供；其他绑定在任何场合都适用，因为游戏是在每个操作内部、根据许多私有状态来决定它是否起作用的。因此一次按下在按下的那一刻就完全确定，之后不再观察，也不会放行。规则在 `src/Rule.Pure.cs` 中，每次按下的记录在 `src/Consume.cs` 中。"
+
+#: manual/how-it-works.md:24
+msgid "Who gets an input"
+msgstr "输入归谁"
+
+#: manual/how-it-works.md:26
+msgid "Every read of a bindable input asks one place, the mod's gate (`src/Consume.Pure.cs`), whether the reader gets it. Two things take an input away from everyone else:"
+msgstr "每次读取可绑定的输入，都会先问同一个地方，也就是模组的输入闸门（`src/Consume.Pure.cs`）：读取方能不能拿到它。有两种情况会把输入从其他所有读取方那里拿走："
+
+#: manual/how-it-works.md:28
+msgid "**A binding waiting for a key.** Every key, mouse button and wheel notch pressed while it waits goes only to the capture: nobody else sees it go down, held, or released, even when the release comes after the binding is taken. Keys already down when the capture began are left alone, so their release still reaches whoever saw them go down. The options window's keyboard navigation is off meanwhile, so Space or Enter does not press the selected button."
+msgstr "**有绑定正在等待按键。**等待期间按下的每个按键、鼠标按键和滚轮的每一格都只交给捕获：其他读取方看不到它按下、按住或松开，即使松开发生在绑定确定之后也一样。捕获开始前已经按住的键不受影响，所以它们的松开仍会送到看到它们按下的读取方。这段时间里选项窗口的键盘导航也会关闭，空格或回车不会按下当前选中的按钮。"
+
+#: manual/how-it-works.md:29
+msgid "**A binding owning a wheel notch.** The notch does not also scroll (see below)."
+msgstr "**滚轮的某一格归某个绑定。**这一格不会同时用于滚动（见下文）。"
+
+#: manual/how-it-works.md:31
+msgid "The gate covers the engine's key reads by key code and by name, the game's own reads of the middle mouse button and mouse buttons 4 and 5, and the scroll."
+msgstr "闸门覆盖引擎按键代码和按键名称两种方式的按键读取、游戏自己对鼠标中键和鼠标按键 4、5 的读取，以及滚动。"
+
+#: manual/how-it-works.md:33
+msgid "The mouse wheel"
+msgstr "鼠标滚轮"
+
+#: manual/how-it-works.md:35
+msgid "When anything asks the engine whether wheel up or wheel down is pressed, held or released, the mod answers. A notch is pressed for one frame and released in the next, so the game's bindings, its item handlers, the options window and other mods' bindings all see it as a key tapped once. Notches that arrive in the same frame are pressed one per frame, so each one triggers its binding. Fractions of a notch, as some touchpads send, add up until they make one."
+msgstr "每当有代码向引擎询问滚轮向上或向下是否按下、按住或松开时，都由模组来回答。滚轮每滚动一格，就在一帧内算作按下，下一帧算作松开，因此游戏的绑定、物品处理器、选项窗口以及其他模组的绑定都会把它看作轻按了一次的按键。同一帧内滚动的多格会排队，每帧按下一次，所以每一格都会触发一次绑定。一些触控板发送的不足一格的滚动会累加，凑满一格再算。"
+
+#: manual/how-it-works.md:37
+msgid "A notch belongs to a binding by the same rule as any press. A notch that belongs to a binding never scrolls; a notch that belongs to nobody scrolls at once, untouched, as without the mod. While a binding waits for a key, every notch is dropped. The notches are counted in `src/Wheel.Pure.cs`, and kept from the scrolling by the gate."
+msgstr "滚轮的一格归哪个绑定，和任何按下用同一套规则。归某个绑定的一格不会用于滚动；不归任何绑定的一格立即原样用于滚动，和没有模组时一样。有绑定正在等待按键时，所有滚动都会被丢弃。滚轮的格数在 `src/Wheel.Pure.cs` 中计算，由闸门挡住不让它滚动。"
+
+#: manual/how-it-works.md:39
 msgid "The options window"
 msgstr "选项窗口"
 
-#: manual/how-it-works.md:24
-msgid "While a binding waits for a key, the mod takes over the game's key capture. Nothing is taken while keys are down: the button shows the combination so far, and the binding is decided once every key pressed since the capture began is released. The last key or mouse button that is not a modifier becomes the main key, with the modifiers held when it went down. When only modifiers were pressed, the last of them becomes the main key and the others its modifiers."
-msgstr "绑定等待按键时，由模组接管游戏的按键捕获。按键按住期间不做任何判定：按钮上显示目前的组合，等捕获开始后按下的所有键都松开时才确定绑定。最后按下的非修饰键（按键或鼠标按键）成为主键，并带上它按下时按住的修饰键。如果只按了修饰键，最后按下的那个成为主键，其余的作为它的修饰键。"
+#: manual/how-it-works.md:41
+msgid "While a binding waits for a key, the mod takes over the game's key capture. Nothing is taken while keys are down: the button shows the combination so far, and the binding is decided once every key pressed since the capture began is released. The last key, mouse button or wheel notch that is not a modifier becomes the main key, with the modifiers held when it went down. When only modifiers were pressed, the last of them becomes the main key and the others its modifiers."
+msgstr "绑定等待按键时，由模组接管游戏的按键捕获。按键按住期间不做任何判定：按钮上显示目前的组合，等捕获开始后按下的所有键都松开时才确定绑定。最后按下的非修饰键（按键、鼠标按键或滚轮滚动）成为主键，并带上它按下时按住的修饰键。如果只按了修饰键，最后按下的那个成为主键，其余的作为它的修饰键。"
 
-#: manual/how-it-works.md:26
+#: manual/how-it-works.md:43
 msgid "Conflicts are checked against every key binding in the window, including the ones not yet applied. The dragging keys only conflict with each other, because they are held during a drag while the other bindings are pressed."
 msgstr "冲突检查会对照窗口中的所有按键绑定，包括尚未应用的更改。拖动按键只会彼此冲突，因为它们是在拖动时按住的，而其他绑定是按下触发的。"
 
-#: manual/how-it-works.md:28
+#: manual/how-it-works.md:45
 msgid "Interface"
 msgstr "界面"
 
-#: manual/how-it-works.md:30
+#: manual/how-it-works.md:47
 msgid "Everything the mod shows comes from the game's own UI assets. The option rows are the game's key binding entries. The unbind prompt is built with the game's own window builder, which creates the game's window, label and button prefabs, in the same style as the options window. The mod draws nothing itself, so a texture pack that restyles those game assets restyles the mod too."
 msgstr "模组显示的所有内容都来自游戏自带的 UI 资源。选项中的各行就是游戏自己的按键绑定条目。解绑提示用游戏自带的窗口构建器生成，它会创建游戏的窗口、文字和按钮预制体，风格与选项窗口一致。模组本身不绘制任何东西，所以修改这些游戏资源的材质包也会一并作用于模组。"
 
-#: manual/how-it-works.md:32
+#: manual/how-it-works.md:49
 msgid "Tests"
 msgstr "测试"
 
-#: manual/how-it-works.md:34
-msgid "The mod's decisions are kept apart from the game in `src/*.Pure.cs`, which use nothing but plain C#: which binding fires, what the pressed keys become when they are released, when two bindings collide, and how a binding is stored. The code that talks to the game only reads keys and options and passes them on."
-msgstr "模组的判定逻辑与游戏分开，放在 `src/*.Pure.cs` 中，只使用纯 C#：哪个绑定触发、按下的键在松开时变成什么、两个绑定何时冲突、绑定如何保存。与游戏交互的代码只负责读取按键和选项，再把它们交给这些判定。"
+#: manual/how-it-works.md:51
+msgid "The mod's decisions are kept apart from the game in `src/*.Pure.cs`, which use nothing but plain C#: whom a press belongs to, what the pressed keys become when they are released, how wheel notches become presses, when a notch goes to a binding instead of scrolling, what a capture keeps from everyone else, when two bindings collide, and how a binding is stored. The code that talks to the game only reads keys and options and passes them on."
+msgstr "模组的判定逻辑与游戏分开，放在 `src/*.Pure.cs` 中，只使用纯 C#：一次按下归谁、按下的键在松开时变成什么、滚轮的每一格如何变成按键按下、某一格何时交给绑定而不是用于滚动、捕获期间不让其他读取方拿到什么、两个绑定何时冲突、绑定如何保存。与游戏交互的代码只负责读取按键和选项，再把它们交给这些判定。"
 
-#: manual/how-it-works.md:36
+#: manual/how-it-works.md:53
 msgid "`tests/run.sh` runs the checks:"
 msgstr "`tests/run.sh` 运行这些检查："
 
-#: manual/how-it-works.md:38
-msgid "`tests/PureTest.cs` runs those decisions headless, without the game or Unity: E against Ctrl + E, Shift held on the way to Shift + Space, Ctrl + Shift + A, a modifier on its own, collisions within one mod, and more."
-msgstr "`tests/PureTest.cs` 在不需要游戏或 Unity 的环境中检验这些判定：E 与 Ctrl + E、为按 Shift + 空格而先按住的 Shift、Ctrl + Shift + A、单独的修饰键、同一模组内的冲突等。"
+#: manual/how-it-works.md:55
+msgid "`tests/PureTest.cs` runs those decisions headless, without the game or Unity: E against Ctrl + E, Shift held on the way to Shift + Space, Ctrl + Shift + A, a modifier on its own, Ctrl + Shift + E with Ctrl + E and Shift + E bound, a press no binding takes, Ctrl + wheel up, several notches in one frame, a key pressed while binding and released after it, collisions within one mod, and more."
+msgstr "`tests/PureTest.cs` 在不需要游戏或 Unity 的环境中检验这些判定：E 与 Ctrl + E、为按 Shift + 空格而先按住的 Shift、Ctrl + Shift + A、单独的修饰键、同时绑定 Ctrl + E 和 Shift + E 时按下 Ctrl + Shift + E、不归任何绑定的按下、Ctrl + 滚轮向上、同一帧内滚动多格、绑定时按下而在绑定结束后才松开的键、同一模组内的冲突等。"
 
-#: manual/how-it-works.md:39
+#: manual/how-it-works.md:56
 msgid "`tests/ScanTest.cs` runs the game's own mod scanner on the built DLL, when the game is installed. The result is no capabilities."
 msgstr "装了游戏时，`tests/ScanTest.cs` 对构建出的 DLL 运行游戏自带的模组扫描器，结果是不需要任何权限。"
 
@@ -168,8 +204,8 @@ msgid "Better Key Bindings"
 msgstr "按键绑定增强"
 
 #: manual/index.md:3
-msgid "Every key binding in the game's options takes key combinations such as Ctrl + E, and the middle mouse button and mouse buttons 4 and 5. A combination never also triggers a binding on its key alone. The keys the game uses while dragging items can be rebound too."
-msgstr "游戏选项中的每个按键绑定都可以使用 Ctrl + E 这样的组合键，以及鼠标中键和鼠标按键 4、5。组合键不会同时触发只绑定了其主键的绑定。游戏拖动物品时使用的按键也可以重新绑定。"
+msgid "Every key binding in the game's options takes key combinations such as Ctrl + E, the middle mouse button, mouse buttons 4 and 5, and the mouse wheel. A combination never also triggers a binding on its key alone. The keys the game uses while dragging items can be rebound too."
+msgstr "游戏选项中的每个按键绑定都可以使用 Ctrl + E 这样的组合键，以及鼠标中键、鼠标按键 4、5 和鼠标滚轮。组合键不会同时触发只绑定了其主键的绑定。游戏拖动物品时使用的按键也可以重新绑定。"
 
 #: manual/index.md:5
 msgid "![Better Key Bindings cover](../attachments/cover.png)"
@@ -204,128 +240,236 @@ msgid "Click **Apply**. Until then nothing is changed."
 msgstr "点击 **应用**（Apply）。在此之前不会有任何改动。"
 
 #: manual/index.md:16
+msgid "While a binding waits for a key, the keys, mouse buttons and wheel you press go only to the binding: the game, the options window and other mods do not react to them, even when you let go after the binding is taken. Space or Enter does not press the selected button, and the wheel does not scroll the list."
+msgstr "绑定等待按键时，你按下的按键、鼠标按键和滚轮只交给这个绑定：游戏、选项窗口和其他模组都不会对它们做出反应，即使你在绑定确定之后才松开也一样。空格或回车不会按下当前选中的按钮，滚轮也不会滚动列表。"
+
+#: manual/index.md:18
+msgid "![While a binding waits for a key, every key, mouse button and wheel notch pressed goes only to that binding](../attachments/binding-capture.png)"
+msgstr "![绑定等待按键时，按下的每个按键、鼠标按键和滚轮的每一格都只交给这个绑定](../attachments/binding-capture.zh_CN.png)"
+
+#: manual/index.md:20
 msgid "The middle mouse button and mouse buttons 4 and 5 can be bound like any key, with or without modifiers. The left and right buttons stay with the game."
 msgstr "鼠标中键和鼠标按键 4、5 可以像普通按键一样绑定，也可以搭配修饰键。鼠标左键和右键仍归游戏使用。"
 
-#: manual/index.md:18
+#: manual/index.md:22
+msgid "Binding the mouse wheel"
+msgstr "绑定鼠标滚轮"
+
+#: manual/index.md:24
+msgid "Wheel up and wheel down can be bound like any key, with or without modifiers: click a binding, turn the wheel one notch, and the button shows *Wheel Up* or *Wheel Down*. For Ctrl + wheel up, hold Ctrl, turn the wheel up, then let go of Ctrl."
+msgstr "滚轮向上和滚轮向下可以像普通按键一样绑定，也可以搭配修饰键：点击一个绑定，把滚轮滚动一格，按钮就会显示*鼠标滚轮向上*或*鼠标滚轮向下*。要绑定 Ctrl + 滚轮向上，按住 Ctrl，向上滚动滚轮，然后松开 Ctrl。"
+
+#: manual/index.md:26
+msgid "Each notch triggers the binding once. Several notches turned quickly trigger it once for each."
+msgstr "滚轮每滚动一格触发一次绑定。快速连续滚动多格时，每一格都各触发一次。"
+
+#: manual/index.md:27
+msgid "A notch that goes to a binding does not also scroll. Rotating, flipping and resetting an item only apply while you drag one: elsewhere a notch bound to them scrolls as usual. Every other binding applies everywhere, so a plain wheel notch bound to it never scrolls; add a modifier to keep the plain wheel for scrolling."
+msgstr "交给绑定的那一格不会同时用于滚动。旋转、翻转和复位物品只在拖动物品时适用：在其他场合，绑定到它们的滚轮照常滚动。其他绑定在任何场合都适用，所以绑定到它们的单独滚轮永远不会滚动；想保留单独滚轮用于滚动，就给绑定加上修饰键。"
+
+#: manual/index.md:28
+msgid "Where nothing is bound to the wheel, it scrolls as in the game without the mod. With only Ctrl + wheel up bound, the wheel without Ctrl still scrolls up."
+msgstr "没有绑定使用滚轮时，滚轮的滚动和没有模组时一样。只绑定了 Ctrl + 滚轮向上时，不按 Ctrl 的滚轮仍会向上滚动。"
+
+#: manual/index.md:29
+msgid "A notch goes to a binding by the same rule as a key (see below). A notch that no binding takes goes to the game untouched, and the game handles it as it would without the mod."
+msgstr "滚轮的一格归哪个绑定，和按键用同一套规则（见下文）。不归任何绑定的一格原样交给游戏，游戏会像没有模组时一样处理。"
+
+#: manual/index.md:30
+msgid "The keys held while dragging cannot take the wheel, because a notch cannot be held."
+msgstr "拖动时按住的键不能使用滚轮，因为滚轮的一格无法按住。"
+
+#: manual/index.md:32
 msgid "Combinations and single keys"
 msgstr "组合键与单键"
 
-#: manual/index.md:20
-msgid "When several bindings share a key, the one that asks for the most of the held modifiers wins:"
-msgstr "当多个绑定共用一个按键时，要求正被按住的修饰键最多的那个绑定生效："
+#: manual/index.md:34
+msgid "When a key, mouse button or wheel notch goes down, the mod decides once which binding it belongs to, with the modifiers held at that moment:"
+msgstr "按键、鼠标按键或滚轮的一格按下时，模组会根据当时按住的修饰键，判定一次它归哪个绑定："
 
-#: manual/index.md:22
+#: manual/index.md:36
+msgid "A binding that asks for exactly the held modifiers."
+msgstr "修饰键与当前按住的完全一致的绑定。"
+
+#: manual/index.md:37
+msgid "Otherwise, dropping held modifiers, the bindings that ask for the most of them. When several ask for as many, they all run, as one press of each."
+msgstr "否则去掉部分按住的修饰键，找要求的修饰键最多的那些绑定。如果有几个要求的一样多，它们都会执行，相当于每个都按了一次。"
+
+#: manual/index.md:38
+msgid "Otherwise none: the press goes to the game untouched, and the game handles it as it would without the mod."
+msgstr "还找不到就不归任何绑定：这次按下原样交给游戏，游戏会像没有模组时一样处理。"
+
+#: manual/index.md:40
+msgid "Rotate, flip and reset orientation only take part while you drag an item; elsewhere they are left out, as if unbound. The press stays with that binding until the key is released, even if you let go of a modifier first. Your bindings come before the game's own handling of a key; only what the game or another mod reads straight from the engine is outside the mod's reach (see the disclaimer below). For example:"
+msgstr "旋转、翻转和复位朝向只在拖动物品时参与判定；在其他场合，它们会被排除，就像没有绑定一样。直到松开按键为止，这次按下都归那个绑定，即使你先松开了修饰键也一样。你的绑定优先于游戏自己对按键的处理；只有游戏或其他模组直接从引擎读取的输入不在模组的处理范围内（见下文的免责声明）。例如："
+
+#: manual/index.md:42
 msgid "With E bound to one action and Ctrl + E to another, Ctrl + E runs only the second, and E alone runs only the first."
 msgstr "E 绑定一个操作、Ctrl + E 绑定另一个操作时，按 Ctrl + E 只执行后者，单独按 E 只执行前者。"
 
-#: manual/index.md:23
+#: manual/index.md:43
 msgid "Shift + E still runs the E binding when nothing is bound to Shift + E, as the game does without the mod."
 msgstr "如果 Shift + E 没有绑定任何操作，按 Shift + E 仍会执行 E 的绑定，与没有模组时一样。"
 
-#: manual/index.md:24
+#: manual/index.md:44
 msgid "Ctrl + Shift + E runs a Ctrl + Shift + E binding, and neither the Ctrl + E nor the E binding."
 msgstr "按 Ctrl + Shift + E 会执行 Ctrl + Shift + E 的绑定，不会执行 Ctrl + E 或 E 的绑定。"
 
-#: manual/index.md:26
+#: manual/index.md:45
+msgid "With Ctrl + E and Shift + E bound but not Ctrl + Shift + E, Ctrl + Shift + E runs both."
+msgstr "绑定了 Ctrl + E 和 Shift + E、但没有绑定 Ctrl + Shift + E 时，按 Ctrl + Shift + E 会同时执行这两个绑定。"
+
+#: manual/index.md:46
+msgid "With nothing bound to the wheel, Ctrl + wheel up while dragging an item does what the game does with it."
+msgstr "没有绑定使用滚轮时，拖动物品时按 Ctrl + 滚轮向上的效果和游戏原本一样。"
+
+#: manual/index.md:48
+msgid "![How a press in play is decided: bindings that apply here, an exact match, then a downgrade, else the game](../attachments/press-decision.png)"
+msgstr "![游戏中一次按下如何判定：只看当前场景适用的绑定，先找完全一致的，再降级，都没有就交给游戏](../attachments/press-decision.zh_CN.png)"
+
+#: manual/index.md:50
 msgid "Keys already in use"
 msgstr "已被占用的按键"
 
-#: manual/index.md:28
+#: manual/index.md:52
 msgid "Choosing a combination that another binding already uses opens a prompt: **Unbind and use** clears the other binding and gives the combination to this one, and **Cancel** keeps both as they were. The cleared binding shows *None* until you bind it again. Both changes wait for **Apply**."
 msgstr "选择一个已被其他绑定使用的组合时，会弹出提示：**解绑并使用**会清除另一个绑定，并把这个组合给当前绑定；**取消**则让两者保持原样。被清除的绑定会显示为*无*，直到你重新绑定它。两项更改都要点击 **应用** 后才生效。"
 
-#: manual/index.md:30
+#: manual/index.md:54
 msgid "Bindings that other mods add to the options take combinations too. One exception: two bindings of the same other mod cannot share a key with different modifiers, because that mod reads only the key and could not tell them apart, so that counts as a conflict."
 msgstr "其他模组添加到选项里的按键绑定同样支持组合键。只有一个例外：同一个其他模组的两个绑定不能使用相同的主键、只靠修饰键区分，因为那个模组只读取主键，分不清是哪个绑定，所以这种情况算作冲突。"
 
-#: manual/index.md:32
+#: manual/index.md:56
 msgid "Keys held while dragging"
 msgstr "拖动时按住的键"
 
-#: manual/index.md:34
+#: manual/index.md:58
 msgid "The mod's own section of the options holds a key the game otherwise fixes:"
 msgstr "模组在选项中的分区包含一个原本由游戏固定的按键："
 
-#: manual/index.md:36
-#: manual/index.md:46
+#: manual/index.md:60
+#: manual/index.md:70
 msgid "Binding"
 msgstr "绑定"
 
-#: manual/index.md:36
-#: manual/index.md:46
+#: manual/index.md:60
+#: manual/index.md:70
 msgid "Game default"
 msgstr "游戏默认"
 
-#: manual/index.md:36
-#: manual/index.md:46
+#: manual/index.md:60
+#: manual/index.md:70
 msgid "What it does"
 msgstr "作用"
 
-#: manual/index.md:38
+#: manual/index.md:62
 msgid "Precise placement (hold while moving a selection)"
 msgstr "精确放置（移动选中物品时按住）"
 
-#: manual/index.md:38
+#: manual/index.md:62
 msgid "Shift"
 msgstr "Shift"
 
-#: manual/index.md:38
+#: manual/index.md:62
 msgid "Held while moving several selected items: place them exactly."
 msgstr "移动多个选中的物品时按住：精确放置它们。"
 
-#: manual/index.md:40
-msgid "It takes combinations and mouse buttons as well. For a modifier key, either side counts."
-msgstr "它同样支持组合键和鼠标按键。对于修饰键，左右两侧都有效。"
+#: manual/index.md:64
+msgid "It takes combinations and mouse buttons as well, but not the mouse wheel. For a modifier key, either side counts."
+msgstr "它同样支持组合键和鼠标按键，但不支持鼠标滚轮。对于修饰键，左右两侧都有效。"
 
-#: manual/index.md:42
+#: manual/index.md:66
 msgid "Deprecated key bindings"
 msgstr "已弃用的按键绑定"
 
-#: manual/index.md:44
+#: manual/index.md:68
 msgid "Two more keys the game checks sit in a section of their own, marked deprecated:"
 msgstr "游戏检查的另外两个按键放在单独的分区里，标记为已弃用："
 
-#: manual/index.md:48
+#: manual/index.md:72
 msgid "Pick up only one (hold + drag)"
 msgstr "只拿起一个（按住并拖动）"
 
-#: manual/index.md:48
+#: manual/index.md:72
 msgid "Left Alt"
 msgstr "左 Alt"
 
-#: manual/index.md:48
+#: manual/index.md:72
 msgid "Held when you start dragging several of an item: pick up just one."
 msgstr "开始拖动多个同种物品时按住：只拿起一个。"
 
-#: manual/index.md:49
+#: manual/index.md:73
 msgid "Pick up half (hold + drag)"
 msgstr "拿起一半（按住并拖动）"
 
-#: manual/index.md:49
+#: manual/index.md:73
 msgid "Left Shift"
 msgstr "左 Shift"
 
-#: manual/index.md:49
+#: manual/index.md:73
 msgid "Held when you start dragging several of an item: pick up half of them."
 msgstr "开始拖动多个同种物品时按住：拿起一半。"
 
-#: manual/index.md:51
+#: manual/index.md:75
 msgid "They still work, but nothing in the current game reaches them: they only matter for an item worth several units, and no item the game creates in play has more than one. Their tooltips say so."
 msgstr "它们仍然可以使用，但当前游戏中没有任何东西会用到：只有代表多个单位的物品才受影响，而游戏在正常游玩中生成的物品都只有一个单位。它们的提示中也有说明。"
 
-#: manual/index.md:53
+#: manual/index.md:77
 msgid "Limits"
 msgstr "限制"
 
-#: manual/index.md:55
+#: manual/index.md:79
 msgid "Two bindings of the same other mod cannot share a key, even with different modifiers."
 msgstr "同一个其他模组的两个绑定不能共用一个主键，即使修饰键不同。"
 
-#: manual/index.md:56
-msgid "Turning the mod off keeps each binding's key and drops its modifiers, so Ctrl + E becomes E."
-msgstr "停用模组后，每个绑定保留其主键并去掉修饰键，所以 Ctrl + E 会变成 E。"
+#: manual/index.md:80
+msgid "Turning the mod off keeps each binding's key and drops its modifiers, so Ctrl + E becomes E. A binding on the mouse wheel stops working until it is bound again, since the game cannot read the wheel as a key."
+msgstr "停用模组后，每个绑定保留其主键并去掉修饰键，所以 Ctrl + E 会变成 E。绑定在鼠标滚轮上的按键会失效，直到重新绑定，因为游戏本身无法把滚轮当作按键读取。"
 
-#: manual/index.md:57
+#: manual/index.md:81
+msgid "Only rotating, flipping and resetting an item are limited to where they apply (while you drag an item). Every other binding takes its key everywhere, even where its action does nothing, because the game does not show where those actions apply."
+msgstr "只有旋转、翻转和复位物品被限定在适用的场合（拖动物品时）。其他绑定在任何场合都会接手它的按键，即使操作在那里不起作用，因为游戏没有公开这些操作在哪里适用。"
+
+#: manual/index.md:82
 msgid "Built for game version 0.46D."
 msgstr "适用于游戏版本 0.46D。"
+
+#: manual/index.md:84
+msgid "Disclaimer: keys that other mods read directly"
+msgstr "免责声明：其他模组直接读取的按键"
+
+#: manual/index.md:86
+msgid "Better Key Bindings works with key bindings: the ones in the game's options, and the ones other mods add there. A mod that reads a key straight from the engine, with no binding the player can see or change, is outside what this mod handles, and we do not work around it. Such a mod may react to a key you meant for a binding, may also trigger on a combination, and may still see the keys you press while a binding waits for one. That is not a fault of Better Key Bindings and will not be fixed here."
+msgstr "按键绑定增强处理的是按键绑定：游戏选项中的绑定，以及其他模组添加到选项中的绑定。如果一个模组绕过绑定，直接从引擎读取按键，玩家既看不到也改不了，这就不在本模组的处理范围内，我们也不会为它做额外适配。这样的模组可能会对你本想留给某个绑定的按键做出反应，可能在组合键上一并触发，也可能在绑定等待按键时仍然收到你按下的键。这些都不是按键绑定增强的问题，本项目不会修复。"
+
+#: manual/index.md:88
+msgid "We consider reading input directly wrong toward players. It takes keys away from them without asking, they cannot change it or turn it off, and it collides with their own bindings and with other mods where nobody can see it. Mods also have no common standard for key bindings today."
+msgstr "我们认为直接读取输入是对玩家不负责任的做法。它不经玩家同意就占用按键，玩家无法修改也无法关闭，还会在谁也看不到的地方与玩家自己的绑定和其他模组发生冲突。而且目前各个模组之间的按键绑定也缺乏统一的标准。"
+
+#: manual/index.md:90
+msgid "So this project is also a call to mod authors: make every key your mod uses a key binding in the game's options, added with the game's own option API (`ModHelper.AddGameOptionKeyBind`), and read the key the player chose, instead of reading a fixed key from the engine. A binding there gets combinations, mouse buttons, the wheel and conflict checks from Better Key Bindings at no cost to you, and the player stays in control of their keys."
+msgstr "因此，本项目也呼吁各位模组作者：把模组用到的每个按键都做成游戏选项中的按键绑定，用游戏自带的选项接口（`ModHelper.AddGameOptionKeyBind`）添加，并读取玩家选定的按键，而不是从引擎直接读取固定的按键。这样的绑定无需你额外工作，就能从按键绑定增强获得组合键、鼠标按键、滚轮和冲突检查，按键也始终由玩家自己掌控。"
+
+#~ msgid "A notch belongs to a binding by the same rule as any press; a notch that belongs to nobody goes to the game at once, untouched. A notch never both triggers a binding and scrolls: when it belongs to a binding, the mod holds the notch back from the game's scrolling for one frame and watches whether a binding on it fires in that frame: a pressed or held check that comes back true, an item or dialogue handler that takes the key, or the mod that owns another mod's binding reading it. The handlers only look at a key where its action applies, as rotating only while an item is dragged. If one fired, the notch is dropped; if none did, it scrolls in the next frame, one frame late. While a binding waits for a key, every notch is dropped. With nothing bound to the wheel, the scrolling is left alone, without the wait. The notches are counted in `src/Wheel.Pure.cs`, and held back by the gate."
+#~ msgstr "滚轮的一格归哪个绑定，和任何按下用同一套规则；不归任何绑定的一格立即原样交给游戏。同一格不会既触发绑定又滚动：当它归某个绑定时，模组会把这一格对游戏的滚动扣住一帧，并观察这一帧里是否有绑定触发：按下或按住的检查返回真、物品或对话处理器接收了这个键，或者拥有该绑定的其他模组读取了它。处理器只在操作适用的场合才检查对应的键，比如只有拖动物品时才检查旋转键。如果有绑定触发，这一格就被丢弃；如果没有，它会在下一帧用于滚动，只晚一帧。有绑定正在等待按键时，所有滚动都会被丢弃。没有任何绑定使用滚轮时，滚动保持原样，也不会等待。滚轮的格数在 `src/Wheel.Pure.cs` 中计算，扣住由闸门完成。"
+
+#~ msgid "A notch that triggers a binding does not also scroll. A notch whose binding has nothing to do where you are, such as rotating an item while you are not dragging one, scrolls as usual."
+#~ msgstr "触发了绑定的那一格不会同时用于滚动。如果绑定的操作在当前场合不起作用，比如没有拖动物品时的旋转，这一格会照常滚动。"
+
+#~ msgid "Where a wheel binding's action applies, the notch goes to the binding instead of scrolling. Bind the plain wheel only to actions you want there instead of scrolling, or add a modifier."
+#~ msgstr "在滚轮绑定的操作适用的场合，这一格会交给绑定而不是用于滚动。只把你愿意在那些场合替代滚动的操作绑定到单独的滚轮上，或者加上修饰键。"
+
+#~ msgid "A binding may fire when its key is pressed, its modifiers are held, and no other binding on the same key asks for more of the held modifiers. The rule lives in `src/Rule.Pure.cs`."
+#~ msgstr "一个绑定在以下情况下才会触发：它的按键被按下，它的修饰键都被按住，并且同一按键上没有其他绑定要求更多正被按住的修饰键。这条规则位于 `src/Rule.Pure.cs`。"
+
+#~ msgid "A wheel binding takes a notch only with exactly its modifiers. Any other notch goes to the game untouched, and the game handles it as it would without the mod: with only wheel up bound, Ctrl + wheel up while dragging an item turns the item as the game does. Keys work differently, see below."
+#~ msgstr "滚轮绑定只在修饰键完全一致时才接手这一格。其他情况下这一格原样交给游戏，游戏会像没有模组时一样处理：只绑定了单独的滚轮向上时，拖动物品时按 Ctrl + 滚轮向上，物品会像游戏原本那样旋转。按键的规则不同，见下文。"
+
+#~ msgid "When several bindings share a key, the one that asks for the most of the held modifiers wins:"
+#~ msgstr "当多个绑定共用一个按键时，要求正被按住的修饰键最多的那个绑定生效："
+
+#~ msgid "The mouse wheel is stricter: a wheel binding needs exactly its modifiers, and everything else is left to the game (see above)."
+#~ msgstr "鼠标滚轮的规则更严格：滚轮绑定要求修饰键完全一致，其他情况都交给游戏处理（见上文）。"
+
+#~ msgid "When a binding on that wheel direction has all its modifiers held, the mod hides the notch from the game's scrolling for that frame, so it never both triggers the binding and scrolls. While the options window waits for a key, every notch is hidden. With nothing bound to the wheel, the scrolling is left alone. This counting lives in `src/Wheel.Pure.cs`."
+#~ msgstr "当该滚动方向上有绑定的修饰键全部按住时，模组会在这一帧对游戏的滚动隐藏这一格，所以同一格不会既触发绑定又滚动。选项窗口等待按键时，所有滚动都会被隐藏。没有任何绑定使用滚轮时，滚动保持原样。这部分计数逻辑在 `src/Wheel.Pure.cs` 中。"

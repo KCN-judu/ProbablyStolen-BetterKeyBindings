@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: conf.json:summary
-msgid "Key combinations, the middle mouse button and mouse buttons 4 and 5 for every key binding, without double triggers."
+msgid "Key combinations, the middle mouse button, mouse buttons 4 and 5 and the mouse wheel for every key binding, without double triggers."
 msgstr ""
 
 #: manual/building.md:1
@@ -92,74 +92,110 @@ msgid "The key stays in the game's own key binding store, so the game saves it a
 msgstr ""
 
 #: manual/how-it-works.md:9
-msgid "Modifiers do not care about the side: Ctrl means either Ctrl key, or Cmd on a Mac keyboard. Shift and Alt work the same way."
+msgid "The mouse wheel has no key code in the engine, so wheel up and wheel down get two numbers above all of the engine's keys. The game stores them like any other key."
 msgstr ""
 
 #: manual/how-it-works.md:11
-msgid "Reading a binding"
+msgid "Modifiers do not care about the side: Ctrl means either Ctrl key, or Cmd on a Mac keyboard. Shift and Alt work the same way."
 msgstr ""
 
 #: manual/how-it-works.md:13
-msgid "Bindings are read in four ways, and each one is covered:"
+msgid "Reading a binding"
 msgstr ""
 
 #: manual/how-it-works.md:15
-msgid "**Pressed or held checks** (toolbox slots, the bell, trash, options, control hints, quick move): the mod answers these checks itself, with the modifiers taken into account."
-msgstr ""
-
-#: manual/how-it-works.md:16
-msgid "**Item and dialogue handlers** compare the pressed keys with the binding's key. While such a handler handles a key press, a binding that may not fire reads as unbound, so two bindings on one key stay apart. Key releases keep the plain key, so letting go of a modifier first never leaves an action stuck."
+msgid "Bindings are read in four ways, and each one is covered:"
 msgstr ""
 
 #: manual/how-it-works.md:17
-msgid "**Other mods' bindings**: those mods read their key straight from the engine. When such a read finds the key pressed, the mod checks who is asking: a read by the mod that owns the binding counts only if the binding may fire. The game's own direct key reads are left alone."
+msgid "**Pressed or held checks** (toolbox slots, the bell, trash, options, control hints, quick move): the mod answers these checks itself, with the modifiers taken into account."
 msgstr ""
 
 #: manual/how-it-works.md:18
-msgid "**Dragging keys** that the game checks directly (Left Alt and Left Shift when a drag starts, Shift for precise placement) are redirected to the mod's own bindings."
+msgid "**Item and dialogue handlers** compare the pressed keys with the binding's key. While such a handler handles a key press, a binding that may not trigger reads as unbound, so two bindings on one key stay apart. Key releases keep the plain key, so letting go of a modifier first never leaves an action stuck."
+msgstr ""
+
+#: manual/how-it-works.md:19
+msgid "**Other mods' bindings**: those mods read their key straight from the engine. When such a read finds the key pressed, the mod checks who is asking: a read by the mod that owns the binding counts only if the binding may trigger. The game's own direct key reads are left alone."
 msgstr ""
 
 #: manual/how-it-works.md:20
-msgid "A binding may fire when its key is pressed, its modifiers are held, and no other binding on the same key asks for more of the held modifiers. The rule lives in `src/Rule.Pure.cs`."
+msgid "**Dragging keys** that the game checks directly (Left Alt and Left Shift when a drag starts, Shift for precise placement) are redirected to the mod's own bindings."
 msgstr ""
 
 #: manual/how-it-works.md:22
-msgid "The options window"
+msgid "Whom a press belongs to is decided once, the first time it is seen going down, with the modifiers held then, among the bindings that apply where the player is: the bindings on that key asking for exactly those modifiers, else the ones asking for the most of them (several at once when they ask for as many), else nobody, and the press goes to the game untouched. Every read of a binding during the press only asks this answer, so the press stays with the same bindings until the key is up. Rotating, flipping and resetting an item only apply while an item is dragged, which the game shows in a public state; every other binding applies everywhere, since the game decides inside each action, from many private states, whether it does anything. So a press is decided completely when it goes down, and nothing is watched or handed back afterwards. The rule lives in `src/Rule.Pure.cs`, the record of each press in `src/Consume.cs`."
 msgstr ""
 
 #: manual/how-it-works.md:24
-msgid "While a binding waits for a key, the mod takes over the game's key capture. Nothing is taken while keys are down: the button shows the combination so far, and the binding is decided once every key pressed since the capture began is released. The last key or mouse button that is not a modifier becomes the main key, with the modifiers held when it went down. When only modifiers were pressed, the last of them becomes the main key and the others its modifiers."
+msgid "Who gets an input"
 msgstr ""
 
 #: manual/how-it-works.md:26
-msgid "Conflicts are checked against every key binding in the window, including the ones not yet applied. The dragging keys only conflict with each other, because they are held during a drag while the other bindings are pressed."
+msgid "Every read of a bindable input asks one place, the mod's gate (`src/Consume.Pure.cs`), whether the reader gets it. Two things take an input away from everyone else:"
 msgstr ""
 
 #: manual/how-it-works.md:28
-msgid "Interface"
+msgid "**A binding waiting for a key.** Every key, mouse button and wheel notch pressed while it waits goes only to the capture: nobody else sees it go down, held, or released, even when the release comes after the binding is taken. Keys already down when the capture began are left alone, so their release still reaches whoever saw them go down. The options window's keyboard navigation is off meanwhile, so Space or Enter does not press the selected button."
 msgstr ""
 
-#: manual/how-it-works.md:30
-msgid "Everything the mod shows comes from the game's own UI assets. The option rows are the game's key binding entries. The unbind prompt is built with the game's own window builder, which creates the game's window, label and button prefabs, in the same style as the options window. The mod draws nothing itself, so a texture pack that restyles those game assets restyles the mod too."
+#: manual/how-it-works.md:29
+msgid "**A binding owning a wheel notch.** The notch does not also scroll (see below)."
 msgstr ""
 
-#: manual/how-it-works.md:32
-msgid "Tests"
+#: manual/how-it-works.md:31
+msgid "The gate covers the engine's key reads by key code and by name, the game's own reads of the middle mouse button and mouse buttons 4 and 5, and the scroll."
 msgstr ""
 
-#: manual/how-it-works.md:34
-msgid "The mod's decisions are kept apart from the game in `src/*.Pure.cs`, which use nothing but plain C#: which binding fires, what the pressed keys become when they are released, when two bindings collide, and how a binding is stored. The code that talks to the game only reads keys and options and passes them on."
+#: manual/how-it-works.md:33
+msgid "The mouse wheel"
 msgstr ""
 
-#: manual/how-it-works.md:36
-msgid "`tests/run.sh` runs the checks:"
+#: manual/how-it-works.md:35
+msgid "When anything asks the engine whether wheel up or wheel down is pressed, held or released, the mod answers. A notch is pressed for one frame and released in the next, so the game's bindings, its item handlers, the options window and other mods' bindings all see it as a key tapped once. Notches that arrive in the same frame are pressed one per frame, so each one triggers its binding. Fractions of a notch, as some touchpads send, add up until they make one."
 msgstr ""
 
-#: manual/how-it-works.md:38
-msgid "`tests/PureTest.cs` runs those decisions headless, without the game or Unity: E against Ctrl + E, Shift held on the way to Shift + Space, Ctrl + Shift + A, a modifier on its own, collisions within one mod, and more."
+#: manual/how-it-works.md:37
+msgid "A notch belongs to a binding by the same rule as any press. A notch that belongs to a binding never scrolls; a notch that belongs to nobody scrolls at once, untouched, as without the mod. While a binding waits for a key, every notch is dropped. The notches are counted in `src/Wheel.Pure.cs`, and kept from the scrolling by the gate."
 msgstr ""
 
 #: manual/how-it-works.md:39
+msgid "The options window"
+msgstr ""
+
+#: manual/how-it-works.md:41
+msgid "While a binding waits for a key, the mod takes over the game's key capture. Nothing is taken while keys are down: the button shows the combination so far, and the binding is decided once every key pressed since the capture began is released. The last key, mouse button or wheel notch that is not a modifier becomes the main key, with the modifiers held when it went down. When only modifiers were pressed, the last of them becomes the main key and the others its modifiers."
+msgstr ""
+
+#: manual/how-it-works.md:43
+msgid "Conflicts are checked against every key binding in the window, including the ones not yet applied. The dragging keys only conflict with each other, because they are held during a drag while the other bindings are pressed."
+msgstr ""
+
+#: manual/how-it-works.md:45
+msgid "Interface"
+msgstr ""
+
+#: manual/how-it-works.md:47
+msgid "Everything the mod shows comes from the game's own UI assets. The option rows are the game's key binding entries. The unbind prompt is built with the game's own window builder, which creates the game's window, label and button prefabs, in the same style as the options window. The mod draws nothing itself, so a texture pack that restyles those game assets restyles the mod too."
+msgstr ""
+
+#: manual/how-it-works.md:49
+msgid "Tests"
+msgstr ""
+
+#: manual/how-it-works.md:51
+msgid "The mod's decisions are kept apart from the game in `src/*.Pure.cs`, which use nothing but plain C#: whom a press belongs to, what the pressed keys become when they are released, how wheel notches become presses, when a notch goes to a binding instead of scrolling, what a capture keeps from everyone else, when two bindings collide, and how a binding is stored. The code that talks to the game only reads keys and options and passes them on."
+msgstr ""
+
+#: manual/how-it-works.md:53
+msgid "`tests/run.sh` runs the checks:"
+msgstr ""
+
+#: manual/how-it-works.md:55
+msgid "`tests/PureTest.cs` runs those decisions headless, without the game or Unity: E against Ctrl + E, Shift held on the way to Shift + Space, Ctrl + Shift + A, a modifier on its own, Ctrl + Shift + E with Ctrl + E and Shift + E bound, a press no binding takes, Ctrl + wheel up, several notches in one frame, a key pressed while binding and released after it, collisions within one mod, and more."
+msgstr ""
+
+#: manual/how-it-works.md:56
 msgid "`tests/ScanTest.cs` runs the game's own mod scanner on the built DLL, when the game is installed. The result is no capabilities."
 msgstr ""
 
@@ -168,7 +204,7 @@ msgid "Better Key Bindings"
 msgstr ""
 
 #: manual/index.md:3
-msgid "Every key binding in the game's options takes key combinations such as Ctrl + E, and the middle mouse button and mouse buttons 4 and 5. A combination never also triggers a binding on its key alone. The keys the game uses while dragging items can be rebound too."
+msgid "Every key binding in the game's options takes key combinations such as Ctrl + E, the middle mouse button, mouse buttons 4 and 5, and the mouse wheel. A combination never also triggers a binding on its key alone. The keys the game uses while dragging items can be rebound too."
 msgstr ""
 
 #: manual/index.md:5
@@ -204,128 +240,212 @@ msgid "Click **Apply**. Until then nothing is changed."
 msgstr ""
 
 #: manual/index.md:16
-msgid "The middle mouse button and mouse buttons 4 and 5 can be bound like any key, with or without modifiers. The left and right buttons stay with the game."
+msgid "While a binding waits for a key, the keys, mouse buttons and wheel you press go only to the binding: the game, the options window and other mods do not react to them, even when you let go after the binding is taken. Space or Enter does not press the selected button, and the wheel does not scroll the list."
 msgstr ""
 
 #: manual/index.md:18
-msgid "Combinations and single keys"
+msgid "![While a binding waits for a key, every key, mouse button and wheel notch pressed goes only to that binding](../attachments/binding-capture.png)"
 msgstr ""
 
 #: manual/index.md:20
-msgid "When several bindings share a key, the one that asks for the most of the held modifiers wins:"
+msgid "The middle mouse button and mouse buttons 4 and 5 can be bound like any key, with or without modifiers. The left and right buttons stay with the game."
 msgstr ""
 
 #: manual/index.md:22
-msgid "With E bound to one action and Ctrl + E to another, Ctrl + E runs only the second, and E alone runs only the first."
-msgstr ""
-
-#: manual/index.md:23
-msgid "Shift + E still runs the E binding when nothing is bound to Shift + E, as the game does without the mod."
+msgid "Binding the mouse wheel"
 msgstr ""
 
 #: manual/index.md:24
-msgid "Ctrl + Shift + E runs a Ctrl + Shift + E binding, and neither the Ctrl + E nor the E binding."
+msgid "Wheel up and wheel down can be bound like any key, with or without modifiers: click a binding, turn the wheel one notch, and the button shows *Wheel Up* or *Wheel Down*. For Ctrl + wheel up, hold Ctrl, turn the wheel up, then let go of Ctrl."
 msgstr ""
 
 #: manual/index.md:26
-msgid "Keys already in use"
+msgid "Each notch triggers the binding once. Several notches turned quickly trigger it once for each."
+msgstr ""
+
+#: manual/index.md:27
+msgid "A notch that goes to a binding does not also scroll. Rotating, flipping and resetting an item only apply while you drag one: elsewhere a notch bound to them scrolls as usual. Every other binding applies everywhere, so a plain wheel notch bound to it never scrolls; add a modifier to keep the plain wheel for scrolling."
 msgstr ""
 
 #: manual/index.md:28
-msgid "Choosing a combination that another binding already uses opens a prompt: **Unbind and use** clears the other binding and gives the combination to this one, and **Cancel** keeps both as they were. The cleared binding shows *None* until you bind it again. Both changes wait for **Apply**."
+msgid "Where nothing is bound to the wheel, it scrolls as in the game without the mod. With only Ctrl + wheel up bound, the wheel without Ctrl still scrolls up."
+msgstr ""
+
+#: manual/index.md:29
+msgid "A notch goes to a binding by the same rule as a key (see below). A notch that no binding takes goes to the game untouched, and the game handles it as it would without the mod."
 msgstr ""
 
 #: manual/index.md:30
-msgid "Bindings that other mods add to the options take combinations too. One exception: two bindings of the same other mod cannot share a key with different modifiers, because that mod reads only the key and could not tell them apart, so that counts as a conflict."
+msgid "The keys held while dragging cannot take the wheel, because a notch cannot be held."
 msgstr ""
 
 #: manual/index.md:32
-msgid "Keys held while dragging"
+msgid "Combinations and single keys"
 msgstr ""
 
 #: manual/index.md:34
-msgid "The mod's own section of the options holds a key the game otherwise fixes:"
+msgid "When a key, mouse button or wheel notch goes down, the mod decides once which binding it belongs to, with the modifiers held at that moment:"
 msgstr ""
 
 #: manual/index.md:36
-#: manual/index.md:46
-msgid "Binding"
+msgid "A binding that asks for exactly the held modifiers."
 msgstr ""
 
-#: manual/index.md:36
-#: manual/index.md:46
-msgid "Game default"
-msgstr ""
-
-#: manual/index.md:36
-#: manual/index.md:46
-msgid "What it does"
+#: manual/index.md:37
+msgid "Otherwise, dropping held modifiers, the bindings that ask for the most of them. When several ask for as many, they all run, as one press of each."
 msgstr ""
 
 #: manual/index.md:38
-msgid "Precise placement (hold while moving a selection)"
-msgstr ""
-
-#: manual/index.md:38
-msgid "Shift"
-msgstr ""
-
-#: manual/index.md:38
-msgid "Held while moving several selected items: place them exactly."
+msgid "Otherwise none: the press goes to the game untouched, and the game handles it as it would without the mod."
 msgstr ""
 
 #: manual/index.md:40
-msgid "It takes combinations and mouse buttons as well. For a modifier key, either side counts."
+msgid "Rotate, flip and reset orientation only take part while you drag an item; elsewhere they are left out, as if unbound. The press stays with that binding until the key is released, even if you let go of a modifier first. Your bindings come before the game's own handling of a key; only what the game or another mod reads straight from the engine is outside the mod's reach (see the disclaimer below). For example:"
 msgstr ""
 
 #: manual/index.md:42
-msgid "Deprecated key bindings"
+msgid "With E bound to one action and Ctrl + E to another, Ctrl + E runs only the second, and E alone runs only the first."
+msgstr ""
+
+#: manual/index.md:43
+msgid "Shift + E still runs the E binding when nothing is bound to Shift + E, as the game does without the mod."
 msgstr ""
 
 #: manual/index.md:44
-msgid "Two more keys the game checks sit in a section of their own, marked deprecated:"
+msgid "Ctrl + Shift + E runs a Ctrl + Shift + E binding, and neither the Ctrl + E nor the E binding."
+msgstr ""
+
+#: manual/index.md:45
+msgid "With Ctrl + E and Shift + E bound but not Ctrl + Shift + E, Ctrl + Shift + E runs both."
+msgstr ""
+
+#: manual/index.md:46
+msgid "With nothing bound to the wheel, Ctrl + wheel up while dragging an item does what the game does with it."
 msgstr ""
 
 #: manual/index.md:48
-msgid "Pick up only one (hold + drag)"
+msgid "![How a press in play is decided: bindings that apply here, an exact match, then a downgrade, else the game](../attachments/press-decision.png)"
 msgstr ""
 
-#: manual/index.md:48
-msgid "Left Alt"
+#: manual/index.md:50
+msgid "Keys already in use"
 msgstr ""
 
-#: manual/index.md:48
-msgid "Held when you start dragging several of an item: pick up just one."
+#: manual/index.md:52
+msgid "Choosing a combination that another binding already uses opens a prompt: **Unbind and use** clears the other binding and gives the combination to this one, and **Cancel** keeps both as they were. The cleared binding shows *None* until you bind it again. Both changes wait for **Apply**."
 msgstr ""
 
-#: manual/index.md:49
-msgid "Pick up half (hold + drag)"
-msgstr ""
-
-#: manual/index.md:49
-msgid "Left Shift"
-msgstr ""
-
-#: manual/index.md:49
-msgid "Held when you start dragging several of an item: pick up half of them."
-msgstr ""
-
-#: manual/index.md:51
-msgid "They still work, but nothing in the current game reaches them: they only matter for an item worth several units, and no item the game creates in play has more than one. Their tooltips say so."
-msgstr ""
-
-#: manual/index.md:53
-msgid "Limits"
-msgstr ""
-
-#: manual/index.md:55
-msgid "Two bindings of the same other mod cannot share a key, even with different modifiers."
+#: manual/index.md:54
+msgid "Bindings that other mods add to the options take combinations too. One exception: two bindings of the same other mod cannot share a key with different modifiers, because that mod reads only the key and could not tell them apart, so that counts as a conflict."
 msgstr ""
 
 #: manual/index.md:56
-msgid "Turning the mod off keeps each binding's key and drops its modifiers, so Ctrl + E becomes E."
+msgid "Keys held while dragging"
 msgstr ""
 
-#: manual/index.md:57
+#: manual/index.md:58
+msgid "The mod's own section of the options holds a key the game otherwise fixes:"
+msgstr ""
+
+#: manual/index.md:60
+#: manual/index.md:70
+msgid "Binding"
+msgstr ""
+
+#: manual/index.md:60
+#: manual/index.md:70
+msgid "Game default"
+msgstr ""
+
+#: manual/index.md:60
+#: manual/index.md:70
+msgid "What it does"
+msgstr ""
+
+#: manual/index.md:62
+msgid "Precise placement (hold while moving a selection)"
+msgstr ""
+
+#: manual/index.md:62
+msgid "Shift"
+msgstr ""
+
+#: manual/index.md:62
+msgid "Held while moving several selected items: place them exactly."
+msgstr ""
+
+#: manual/index.md:64
+msgid "It takes combinations and mouse buttons as well, but not the mouse wheel. For a modifier key, either side counts."
+msgstr ""
+
+#: manual/index.md:66
+msgid "Deprecated key bindings"
+msgstr ""
+
+#: manual/index.md:68
+msgid "Two more keys the game checks sit in a section of their own, marked deprecated:"
+msgstr ""
+
+#: manual/index.md:72
+msgid "Pick up only one (hold + drag)"
+msgstr ""
+
+#: manual/index.md:72
+msgid "Left Alt"
+msgstr ""
+
+#: manual/index.md:72
+msgid "Held when you start dragging several of an item: pick up just one."
+msgstr ""
+
+#: manual/index.md:73
+msgid "Pick up half (hold + drag)"
+msgstr ""
+
+#: manual/index.md:73
+msgid "Left Shift"
+msgstr ""
+
+#: manual/index.md:73
+msgid "Held when you start dragging several of an item: pick up half of them."
+msgstr ""
+
+#: manual/index.md:75
+msgid "They still work, but nothing in the current game reaches them: they only matter for an item worth several units, and no item the game creates in play has more than one. Their tooltips say so."
+msgstr ""
+
+#: manual/index.md:77
+msgid "Limits"
+msgstr ""
+
+#: manual/index.md:79
+msgid "Two bindings of the same other mod cannot share a key, even with different modifiers."
+msgstr ""
+
+#: manual/index.md:80
+msgid "Turning the mod off keeps each binding's key and drops its modifiers, so Ctrl + E becomes E. A binding on the mouse wheel stops working until it is bound again, since the game cannot read the wheel as a key."
+msgstr ""
+
+#: manual/index.md:81
+msgid "Only rotating, flipping and resetting an item are limited to where they apply (while you drag an item). Every other binding takes its key everywhere, even where its action does nothing, because the game does not show where those actions apply."
+msgstr ""
+
+#: manual/index.md:82
 msgid "Built for game version 0.46D."
+msgstr ""
+
+#: manual/index.md:84
+msgid "Disclaimer: keys that other mods read directly"
+msgstr ""
+
+#: manual/index.md:86
+msgid "Better Key Bindings works with key bindings: the ones in the game's options, and the ones other mods add there. A mod that reads a key straight from the engine, with no binding the player can see or change, is outside what this mod handles, and we do not work around it. Such a mod may react to a key you meant for a binding, may also trigger on a combination, and may still see the keys you press while a binding waits for one. That is not a fault of Better Key Bindings and will not be fixed here."
+msgstr ""
+
+#: manual/index.md:88
+msgid "We consider reading input directly wrong toward players. It takes keys away from them without asking, they cannot change it or turn it off, and it collides with their own bindings and with other mods where nobody can see it. Mods also have no common standard for key bindings today."
+msgstr ""
+
+#: manual/index.md:90
+msgid "So this project is also a call to mod authors: make every key your mod uses a key binding in the game's options, added with the game's own option API (`ModHelper.AddGameOptionKeyBind`), and read the key the player chose, instead of reading a fixed key from the engine. A binding there gets combinations, mouse buttons, the wheel and conflict checks from Better Key Bindings at no cost to you, and the player stays in control of their keys."
 msgstr ""

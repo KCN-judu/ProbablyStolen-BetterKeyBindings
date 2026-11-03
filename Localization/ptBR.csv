@@ -14,6 +14,8 @@ mod_alt,Alt
 key_mouse_middle,Botão do meio do mouse
 key_mouse_4,Botão 4 do mouse
 key_mouse_5,Botão 5 do mouse
+key_wheel_up,Roda do mouse para cima
+key_wheel_down,Roda do mouse para baixo
 conflict_title,Tecla já em uso
 conflict_body,{0} já está atribuída a “{1}”. Remover a atribuição de “{1}” e usar {0} para “{2}”?
 conflict_unbind,Remover e usar

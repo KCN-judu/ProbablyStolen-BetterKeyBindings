@@ -13,6 +13,20 @@ namespace BetterKeyBindings
         // Mouse buttons a binding may use besides the keyboard: middle, 4 and 5. Left and right stay the game's.
         public static readonly KeyCode[] MouseKeys = { KeyCode.Mouse2, KeyCode.Mouse3, KeyCode.Mouse4 };
 
+        // The wheel's two directions as keys. Unity has no key code for them, so they take values above all of its own;
+        // the game stores a binding's key as a number, so it keeps them like any other key. Consume answers for them.
+        public const KeyCode WheelUp = (KeyCode)1001, WheelDown = (KeyCode)1002;
+        public static readonly KeyCode[] WheelKeys = { WheelUp, WheelDown };
+
+        public static bool IsWheel(KeyCode k) { return k == WheelUp || k == WheelDown; }
+
+        // Every input a binding can take: the keyboard but Escape, the mouse buttons above, and the wheel.
+        public static bool IsBindable(KeyCode k)
+        {
+            if (k > KeyCode.None && k < KeyCode.Mouse0) return k != KeyCode.Escape;
+            return IsWheel(k) || Array.IndexOf(MouseKeys, k) >= 0;
+        }
+
         public static Func<string, string> L = k => k;
 
         // The modifier group a key belongs to, or 0 for any other key.
@@ -72,6 +86,8 @@ namespace BetterKeyBindings
                 case KeyCode.Mouse2: return L("key_mouse_middle");
                 case KeyCode.Mouse3: return L("key_mouse_4");
                 case KeyCode.Mouse4: return L("key_mouse_5");
+                case WheelUp: return L("key_wheel_up");
+                case WheelDown: return L("key_wheel_down");
             }
             return null;
         }
@@ -97,7 +113,7 @@ namespace BetterKeyBindings
         {
             int k;
             Rule.Unpack(packed, out k, out mods);
-            key = Enum.IsDefined(typeof(KeyCode), k) ? (KeyCode)k : KeyCode.None;
+            key = Enum.IsDefined(typeof(KeyCode), k) || IsWheel((KeyCode)k) ? (KeyCode)k : KeyCode.None;
         }
     }
 }

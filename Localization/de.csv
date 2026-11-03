@@ -14,6 +14,8 @@ mod_alt,Alt
 key_mouse_middle,Mittlere Maustaste
 key_mouse_4,Maustaste 4
 key_mouse_5,Maustaste 5
+key_wheel_up,Mausrad hoch
+key_wheel_down,Mausrad runter
 conflict_title,Taste bereits belegt
 conflict_body,{0} ist bereits „{1}“ zugewiesen. Zuweisung von „{1}“ aufheben und {0} für „{2}“ verwenden?
 conflict_unbind,Aufheben und verwenden

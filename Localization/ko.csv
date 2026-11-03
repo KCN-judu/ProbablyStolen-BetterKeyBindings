@@ -14,6 +14,8 @@ mod_alt,Alt
 key_mouse_middle,마우스 가운데 버튼
 key_mouse_4,마우스 버튼 4
 key_mouse_5,마우스 버튼 5
+key_wheel_up,마우스 휠 위로
+key_wheel_down,마우스 휠 아래로
 conflict_title,이미 사용 중인 키
 conflict_body,{0}은(는) 이미 '{1}'에 지정되어 있습니다. '{1}'의 지정을 해제하고 {0}을(를) '{2}'에 사용할까요?
 conflict_unbind,해제하고 사용

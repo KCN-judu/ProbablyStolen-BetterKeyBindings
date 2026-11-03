@@ -8,14 +8,15 @@ namespace BetterKeyBindings
 {
     // What the game reads at play time.
     //
-    // The game keeps one KeyCode per binding (KeyBindHelper); this mod keeps the modifiers next to it. A binding fires
-    // when its key is pressed, its modifiers are held, and no other binding on the same key asks for more of the
-    // held modifiers. So with E bound to one action and Ctrl + E to another, Ctrl + E runs only the second; E alone,
-    // or Shift + E when nothing is bound to it, still runs the first, as in the game without the mod.
+    // The game keeps one KeyCode per binding (KeyBindHelper); this mod keeps the modifiers next to it. Whom a press
+    // belongs to is decided once, when the key goes down (Consume.OwnersOf): the binding asking for exactly the held
+    // modifiers, else the ones asking for the most of them. So with E bound to one action and Ctrl + E to another,
+    // Ctrl + E runs only the second; E alone, or Shift + E when nothing is bound to it, still runs the first, as in
+    // the game without the mod.
     //
     // The game reads bindings in three ways, and each is covered:
     //   KeyBindHelper.GetKeyDown / GetKey(id)        replaced (toolbox, bell, options, trash, hints, ...);
-    //   KeyBindHelper.Get(id) inside OnEventPress    returns None while the binding may not fire (dragging,
+    //   KeyBindHelper.Get(id) inside OnEventPress    returns None while the binding may not trigger (dragging,
     //                                                sort menu, quick move), so two bindings on one key stay apart;
     //   hard-coded Alt / Shift while dragging        now the "hold" bindings below.
     public static class Bindings
@@ -50,7 +51,6 @@ namespace BetterKeyBindings
 
         static int gate;
         static bool evaluating;
-        static readonly List<int> sameKey = new List<int>();
 
         // ---------------------------------------------------------------- stored values
 
@@ -100,26 +100,29 @@ namespace BetterKeyBindings
 
         // ---------------------------------------------------------------- deciding
 
-        // May this binding fire now, given its key is pressed? See the class comment.
-        public static bool MayFire(string id, KeyCode key)
+        // May this binding trigger now? Not where it does not apply; elsewhere the press of its key decides (see
+        // Consume.OwnersOf).
+        public static bool MayTrigger(string id, KeyCode key)
         {
-            if (key == KeyCode.None) return false;
-            int want = ModsOf(id), held = Combo.Held(key);
-            if ((want & ~held) != 0) return false;
+            if (key == KeyCode.None || !Active(id)) return false;
             if (evaluating) return true;
-            evaluating = true;
-            try
-            {
-                sameKey.Clear();
-                foreach (var b in KeyBindHelper.Bindings)
-                    if (b.id != id && KeyBindHelper.Get(b.id) == key) sameKey.Add(ModsOf(b.id));
-                ModKeys.AddCompetitors(key, sameKey);
-                return Rule.MayFire(want, held, sameKey.ToArray());
-            }
-            finally { evaluating = false; }
+            return Consume.MayTrigger(key, ModsOf(id));
         }
 
-        // Modifiers of the game's bindings on a key, as competitors of other mods' bindings.
+        // Bindings that only apply in one situation; elsewhere their key goes to whoever else wants it, the game
+        // included. Only a situation the game shows in a public, cheap state is used: an item being dragged. Every
+        // other binding applies everywhere, since the game decides inside each action, from many private states,
+        // whether it does anything.
+        static readonly HashSet<string> whileDragging = new HashSet<string> { "rotate_cw", "rotate_ccw", "flip_item", "reset_orientation" };
+
+        public static bool Active(string id)
+        {
+            if (!whileDragging.Contains(id)) return true;
+            var drag = ItemMouseDragHandler.current;
+            return drag != null && drag.IsDraggingItem;
+        }
+
+        // Modifiers of the game's bindings on a key, to decide whom a press belongs to.
         public static void AddCompetitors(KeyCode key, List<int> into)
         {
             bool was = evaluating;
@@ -127,7 +130,7 @@ namespace BetterKeyBindings
             try
             {
                 foreach (var b in KeyBindHelper.Bindings)
-                    if (KeyBindHelper.Get(b.id) == key) into.Add(ModsOf(b.id));
+                    if (Active(b.id) && KeyBindHelper.Get(b.id) == key) into.Add(ModsOf(b.id));
             }
             finally { evaluating = was; }
         }
@@ -179,12 +182,11 @@ namespace BetterKeyBindings
 
         static void GateEnter() { gate++; }
         static void GateLeave() { if (gate > 0) gate--; }
-
         static bool GetKeyDownPrefix(string id, ref bool __result)
         {
             if (KeyBindHelper.SuppressHotkeys) { __result = false; return false; }
             KeyCode k = KeyBindHelper.Get(id);
-            __result = k != KeyCode.None && Input.GetKeyDown(k) && MayFire(id, k);
+            __result = k != KeyCode.None && Input.GetKeyDown(k) && MayTrigger(id, k);
             return false;
         }
 
@@ -192,13 +194,14 @@ namespace BetterKeyBindings
         {
             if (KeyBindHelper.SuppressHotkeys) { __result = false; return false; }
             KeyCode k = KeyBindHelper.Get(id);
-            __result = k != KeyCode.None && Input.GetKey(k) && MayFire(id, k);
+            __result = k != KeyCode.None && Input.GetKey(k) && MayTrigger(id, k);
             return false;
         }
 
         static void GetPostfix(string id, ref KeyCode __result)
         {
-            if (gate > 0 && !evaluating && __result != KeyCode.None && !MayFire(id, __result)) __result = KeyCode.None;
+            if (gate == 0 || evaluating || __result == KeyCode.None) return;
+            if (!MayTrigger(id, __result)) __result = KeyCode.None;
         }
 
         static void KeyNamePostfix(KeyCode key, ref string __result)

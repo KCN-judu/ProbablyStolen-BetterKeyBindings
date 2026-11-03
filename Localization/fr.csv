@@ -14,6 +14,8 @@ mod_alt,Alt
 key_mouse_middle,Bouton central de la souris
 key_mouse_4,Bouton 4 de la souris
 key_mouse_5,Bouton 5 de la souris
+key_wheel_up,Molette de la souris vers le haut
+key_wheel_down,Molette de la souris vers le bas
 conflict_title,Touche déjà utilisée
 conflict_body,{0} est déjà attribué à « {1} ». Retirer l'attribution de « {1} » et utiliser {0} pour « {2} » ?
 conflict_unbind,Retirer et utiliser

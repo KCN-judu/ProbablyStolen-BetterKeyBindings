@@ -14,6 +14,8 @@ mod_alt,Alt
 key_mouse_middle,Tasto centrale del mouse
 key_mouse_4,Tasto 4 del mouse
 key_mouse_5,Tasto 5 del mouse
+key_wheel_up,Rotellina del mouse su
+key_wheel_down,Rotellina del mouse giù
 conflict_title,Tasto già in uso
 conflict_body,{0} è già assegnato a «{1}». Rimuovere l'assegnazione di «{1}» e usare {0} per «{2}»?
 conflict_unbind,Rimuovi e usa

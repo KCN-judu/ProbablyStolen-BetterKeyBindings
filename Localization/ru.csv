@@ -14,6 +14,8 @@ mod_alt,Alt
 key_mouse_middle,Средняя кнопка мыши
 key_mouse_4,Кнопка мыши 4
 key_mouse_5,Кнопка мыши 5
+key_wheel_up,Колесо мыши вверх
+key_wheel_down,Колесо мыши вниз
 conflict_title,Клавиша уже занята
 conflict_body,{0} уже назначена на «{1}». Снять назначение с «{1}» и использовать {0} для «{2}»?
 conflict_unbind,Снять и использовать

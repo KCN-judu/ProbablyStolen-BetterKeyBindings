@@ -14,6 +14,8 @@ mod_alt,Alt
 key_mouse_middle,Botón central del ratón
 key_mouse_4,Botón 4 del ratón
 key_mouse_5,Botón 5 del ratón
+key_wheel_up,Rueda del ratón arriba
+key_wheel_down,Rueda del ratón abajo
 conflict_title,Tecla ya en uso
 conflict_body,{0} ya está asignada a «{1}». ¿Quitar la asignación de «{1}» y usar {0} para «{2}»?
 conflict_unbind,Quitar y usar

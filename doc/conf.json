@@ -1,6 +1,6 @@
 {
   "title": "Better Key Bindings",
-  "summary": "Key combinations, the middle mouse button and mouse buttons 4 and 5 for every key binding, without double triggers.",
+  "summary": "Key combinations, the middle mouse button, mouse buttons 4 and 5 and the mouse wheel for every key binding, without double triggers.",
   "locales": [
     "zh_CN"
   ],
