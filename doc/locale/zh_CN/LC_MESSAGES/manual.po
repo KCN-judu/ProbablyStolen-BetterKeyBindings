@@ -17,7 +17,7 @@ msgstr "构建"
 
 #: manual/building.md:4
 msgid "Requirements"
-msgstr "需求"
+msgstr "环境要求"
 
 #: manual/building.md:6
 msgid "*Probably Stolen*, game version 0.46D. The build compiles against the game's own assemblies in `Probably Stolen_Data/Managed`."
@@ -124,8 +124,8 @@ msgid "**Dragging keys** that the game checks directly (Left Alt and Left Shift 
 msgstr "游戏直接检查的**拖动按键**（开始拖动时的左 Alt 和左 Shift，精确放置时的 Shift）会改为读取模组自己的绑定。"
 
 #: manual/how-it-works.md:22
-msgid "Whom a press belongs to is decided once, the first time it is seen going down, with the modifiers held then, among the bindings that apply where the player is: the bindings on that key asking for exactly those modifiers, else the ones asking for the most of them (several at once when they ask for as many), else nobody, and the press goes to the game untouched. Every read of a binding during the press only asks this answer, so the press stays with the same bindings until the key is up. Rotating, flipping and resetting an item only apply while an item is dragged, which the game shows in a public state; every other binding applies everywhere, since the game decides inside each action, from many private states, whether it does anything. So a press is decided completely when it goes down, and nothing is watched or handed back afterwards. The rule lives in `src/Rule.Pure.cs`, the record of each press in `src/Consume.cs`."
-msgstr "一次按下归谁，只在第一次看到它按下时判定一次，依据的是当时按住的修饰键，并且只在玩家当前场景适用的绑定中判定：先找这个键上修饰键完全一致的绑定；找不到就找要求的修饰键最多的那些绑定，一样多时几个一起；还找不到就不归任何绑定，这次按下原样交给游戏。按住期间每次读取绑定都只看这个结果，所以直到松开为止，这次按下都归同一组绑定。旋转、翻转和复位物品只在拖动物品时适用，这一点游戏通过公开状态提供；其他绑定在任何场合都适用，因为游戏是在每个操作内部、根据许多私有状态来决定它是否起作用的。因此一次按下在按下的那一刻就完全确定，之后不再观察，也不会放行。规则在 `src/Rule.Pure.cs` 中，每次按下的记录在 `src/Consume.cs` 中。"
+msgid "Whom a press belongs to is decided once, the first time it is seen going down, with the modifiers held then, among the bindings that apply where the player is: the bindings on that key asking for exactly those modifiers, else the ones asking for the most of them (several at once when they ask for as many), else nobody, and the press goes to the game untouched. Every read of a binding during the press only asks this answer, so the press stays with the same bindings until the key is up. Rotating, flipping and resetting an item only apply while an item is dragged, which the game shows in a public state; every other binding applies everywhere, since the game decides inside each action, from many private states, whether it does anything. Nothing is watched or handed back afterwards. The rule lives in `src/Rule.Pure.cs`, the record of each press in `src/Consume.cs`."
+msgstr "一次按键归哪个绑定，只在它第一次被看到按下时判定一次，依据是当时按住的修饰键，范围是玩家当前所在场景里适用的绑定。先找这个键上修饰键与按住的完全一致的绑定；没有就找要求修饰键最多的绑定，要求一样多的会一起触发；还是没有，这次按键就不归任何绑定，原样交给游戏。按键持续期间，每次读取绑定都只查这个结果，所以直到松开，这次按键都属于同一批绑定。旋转、翻转和复位物品只在拖着物品时适用，游戏用一个公开状态表示这一点。其他绑定在任何场合都适用，因为一个操作有没有效果，是游戏在操作内部根据许多私有状态决定的。按下的那一刻就定下了归属，之后不再监视，也不用交还。判定规则在 `src/Rule.Pure.cs`，每次按键的记录在 `src/Consume.cs`。"
 
 #: manual/how-it-works.md:24
 msgid "Who gets an input"
@@ -157,7 +157,7 @@ msgstr "每当有代码向引擎询问滚轮向上或向下是否按下、按住
 
 #: manual/how-it-works.md:37
 msgid "A notch belongs to a binding by the same rule as any press. A notch that belongs to a binding never scrolls; a notch that belongs to nobody scrolls at once, untouched, as without the mod. While a binding waits for a key, every notch is dropped. The notches are counted in `src/Wheel.Pure.cs`, and kept from the scrolling by the gate."
-msgstr "滚轮的一格归哪个绑定，和任何按下用同一套规则。归某个绑定的一格不会用于滚动；不归任何绑定的一格立即原样用于滚动，和没有模组时一样。有绑定正在等待按键时，所有滚动都会被丢弃。滚轮的格数在 `src/Wheel.Pure.cs` 中计算，由闸门挡住不让它滚动。"
+msgstr "滚轮的一格归哪个绑定，和任何按下用同一套规则。归某个绑定的一格不会用于滚动；不归任何绑定的一格立即原样用于滚动，和没有模组时一样。有绑定正在等待按键时，所有滚动都会被丢弃。格数在 `src/Wheel.Pure.cs` 中计数，闸门负责不让这一格同时滚动。"
 
 #: manual/how-it-works.md:39
 msgid "The options window"
