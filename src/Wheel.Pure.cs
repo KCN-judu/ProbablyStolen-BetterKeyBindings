@@ -9,6 +9,7 @@ namespace BetterKeyBindings
     public sealed class Notches
     {
         public const int WheelUp = 0, WheelDown = 1;
+        // Cap on notches waiting to be pressed, so one wild spin does not trigger a binding for seconds afterwards.
         public const int MaxQueued = 8;
 
         readonly int[] queued = new int[2];

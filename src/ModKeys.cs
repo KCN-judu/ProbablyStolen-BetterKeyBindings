@@ -20,11 +20,15 @@ namespace BetterKeyBindings
         const string ModsPref = "BetterKeyBindings.optmods.";
         const BindingFlags AnyStatic = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
+        // One option of another mod: its key as that mod reads it, the assembly that reads it, and the modifiers kept here.
         sealed class Binding { public string OptionId; public Assembly Owner; public KeyCode Key; public int Mods; }
 
         static readonly Dictionary<KeyCode, List<Binding>> byKey = new Dictionary<KeyCode, List<Binding>>();
+        // `dirty`: the table below is rebuilt on the next read (options changed, mods loaded). `checking`: stops the
+        // postfix from running on the Input reads it makes itself.
         static bool dirty = true, checking;
         static Assembly self;
+        // Assemblies already logged, so the log names each other mod once.
         static readonly HashSet<Assembly> seen = new HashSet<Assembly>();
 
         public static void Patch(Harmony harmony)
@@ -81,6 +85,8 @@ namespace BetterKeyBindings
             if (byKey.TryGetValue(key, out list)) foreach (var b in list) into.Add(b.Mods);
         }
 
+        // Rebuilds byKey from the option registry: every key binding option with a source mod that is loaded and is not
+        // this mod. The owner assembly is found through ModLoader.Mods, because the caller check compares assemblies.
         static void Refresh()
         {
             if (!dirty) return;
@@ -104,6 +110,10 @@ namespace BetterKeyBindings
                 }
         }
 
+        // Runs after every Input.GetKeyDown / GetKey that returned true. Only reads by a mod that owns a binding on this
+        // key are changed: they become false unless the press belongs to one of that mod's bindings on the key. Other
+        // callers (the game, mods without a binding on the key) keep the real answer. Consume.Raw skips this mod's
+        // own reads.
         static void ReadPostfix(KeyCode key, ref bool __result)
         {
             if (!__result || checking || Consume.Raw) return;
@@ -137,6 +147,8 @@ namespace BetterKeyBindings
         // The first assembly up the stack that is not this mod, Harmony or the engine: whoever asked for the key.
         static Assembly Caller()
         {
+            // Skips 2 frames: this method and the postfix. The stack is walked only for a true read of a key that
+            // another mod binds, which is rare enough for the cost.
             var frames = new StackTrace(2, false).GetFrames();
             if (frames == null) return null;
             foreach (var f in frames)

@@ -20,6 +20,8 @@ namespace BetterKeyBindings
             main = mainMods = lastModifier = lastModifierGroup = 0;
         }
 
+        // `heldMods` is what was held when this key went down; it is kept only for a main key, so Ctrl + E pressed
+        // with Ctrl first and E second still gives Ctrl + E.
         public void Down(int key, int group, int heldMods)
         {
             if (!keys.Contains(key)) { keys.Add(key); groups.Add(group); }

@@ -27,6 +27,8 @@ namespace BetterKeyBindings
             return IsWheel(k) || Array.IndexOf(MouseKeys, k) >= 0;
         }
 
+        // Localizer, set by BetterKeyBindingsMod.OnEnable. Returns the key itself until then, which is also what a
+        // test without the game gets.
         public static Func<string, string> L = k => k;
 
         // The modifier group a key belongs to, or 0 for any other key.
@@ -48,6 +50,9 @@ namespace BetterKeyBindings
 
         public static bool IsModifier(KeyCode k) { return GroupOf(k) != 0; }
 
+        // Whether any key of a modifier group is held. It reads Input.GetKey, which Consume filters while a capture
+        // waits, so code that needs the real state calls it inside Consume.BeginRaw / EndRaw (Consume.Resolve and the
+        // options capture do).
         static bool Down(int group)
         {
             switch (group)
@@ -79,6 +84,8 @@ namespace BetterKeyBindings
             return g != 0 ? Down(g) : Input.GetKey(k);
         }
 
+        // Names for the inputs the game cannot name; null for any other key, which keeps the game's own name
+        // (see Bindings.KeyNamePostfix).
         public static string KeyName(KeyCode k)
         {
             switch (k)
@@ -107,6 +114,8 @@ namespace BetterKeyBindings
             return key == KeyCode.None ? main : ModsPrefix(mods) + main;
         }
 
+        // Key and modifiers in one int for PlayerPrefs (see Rule.Pack). Unpack drops values that are neither a
+        // KeyCode nor a wheel key, so a stored value from a changed game version reads as unbound.
         public static int Pack(KeyCode key, int mods) { return Rule.Pack((int)key, mods); }
 
         public static void Unpack(int packed, out KeyCode key, out int mods)

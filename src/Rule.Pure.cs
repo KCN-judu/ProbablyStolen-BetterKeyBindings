@@ -28,8 +28,10 @@ namespace BetterKeyBindings
             return owners;
         }
 
+        // Whether the binding with these modifiers is in the set Resolve returned.
         public static bool Owns(int owners, int mods) { return (owners & (1 << (mods & AllMods))) != 0; }
 
+        // Number of modifiers in a mask: Ctrl + Shift counts 2.
         static int Count(int m) { return (m & 1) + ((m >> 1) & 1) + ((m >> 2) & 1); }
 
         // Whether two options would collide if both kept their choice. Only options in the same group can collide,

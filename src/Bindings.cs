@@ -49,11 +49,16 @@ namespace BetterKeyBindings
             new Hold { Id = "precise_place", Group = "select", DefaultKey = KeyCode.LeftShift },
         };
 
+        // `gate`: how many gated handlers (see Patch) are running now; KeyBindHelper.Get answers None for a binding
+        // that may not trigger only while it is above 0. `evaluating`: set while the mod itself lists the bindings on
+        // a key (AddCompetitors), so those Get calls return the plain key and do not recurse into the decision.
         static int gate;
         static bool evaluating;
 
         // ---------------------------------------------------------------- stored values
 
+        // Reads the saved modifiers into memory. The game's own keys are not touched: it stores and loads them itself.
+        // Called on every enable, so a change made while the mod was off is picked up.
         public static void Load()
         {
             mods.Clear();
@@ -135,6 +140,8 @@ namespace BetterKeyBindings
             finally { evaluating = was; }
         }
 
+        // Whether a "hold" binding is held now: its key (either side for a modifier) and exactly the modifiers it asks for
+        // or more. Not routed through Consume.OwnersOf: a held key has no press to decide, and a wheel cannot be held.
         public static bool HoldActive(int index)
         {
             var h = Holds[index];
@@ -148,6 +155,8 @@ namespace BetterKeyBindings
         {
             // Types are named at each call: the game's mod scanner asks for a permission when reflection
             // goes through a Type it cannot see.
+            // GetKeyDown and GetKey are replaced outright (prefix returns false), because the game's version would read the
+            // plain key. Get only gets a postfix: it is called from too many places to replace.
             harmony.Patch(typeof(KeyBindHelper).GetMethod("GetKeyDown", AnyStatic), Hook("GetKeyDownPrefix"));
             harmony.Patch(typeof(KeyBindHelper).GetMethod("GetKey", AnyStatic), Hook("GetKeyPrefix"));
             harmony.Patch(typeof(KeyBindHelper).GetMethod("Get", AnyStatic), null, Hook("GetPostfix"));
@@ -180,8 +189,11 @@ namespace BetterKeyBindings
             harmony.Patch(m, Hook("GateEnter"), null, null, Hook("GateLeave"));
         }
 
+        // A counter, so nesting stays correct. GateLeave is patched in as a finalizer, so it runs on every way out of
+        // the handler, exceptions included, and the count cannot stay raised.
         static void GateEnter() { gate++; }
         static void GateLeave() { if (gate > 0) gate--; }
+        // SuppressHotkeys is the game's switch that turns hotkeys off (Consume reads it as "a capture waits"); no binding fires then.
         static bool GetKeyDownPrefix(string id, ref bool __result)
         {
             if (KeyBindHelper.SuppressHotkeys) { __result = false; return false; }
@@ -198,6 +210,8 @@ namespace BetterKeyBindings
             return false;
         }
 
+        // Inside a gated handler a binding that does not own the press reads as unbound, so the handler's comparison
+        // with the pressed key fails for it. Outside those handlers (menus, labels) the key is reported as stored.
         static void GetPostfix(string id, ref KeyCode __result)
         {
             if (gate == 0 || evaluating || __result == KeyCode.None) return;
@@ -210,6 +224,7 @@ namespace BetterKeyBindings
             if (name != null) __result = name;
         }
 
+        // The game's check for the precise placement modifier (hard-coded Shift) answers for the mod's binding instead.
         static bool PreciseHeldPrefix(ref bool __result)
         {
             __result = HoldActive(Precise);
@@ -227,6 +242,7 @@ namespace BetterKeyBindings
             return false;
         }
 
+        // A transpiler rather than a prefix, because StartDrag reads the keys in the middle of a long method.
         // StartDrag reads Input.GetKey(LeftAlt) for "pick up only one" and Input.GetKey(LeftShift) for "pick up half". Those
         // two calls go to DragKeyHeld instead, which gets the same key and answers for the binding behind it.
         static IEnumerable<CodeInstruction> StartDragTranspiler(IEnumerable<CodeInstruction> instructions)
@@ -242,6 +258,7 @@ namespace BetterKeyBindings
                 list[i].operand = dragKeyHeld;
                 replaced++;
             }
+            // A game update that changes StartDrag shows up here as a count other than 2; the keys then keep the game's behaviour.
             if (replaced != 2) Debug.LogWarning(BetterKeyBindingsMod.Tag + "drag keys: " + replaced + " of 2 found");
             return list;
         }

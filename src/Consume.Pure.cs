@@ -29,7 +29,8 @@ namespace BetterKeyBindings
 
         public bool Capturing { get { return capturing; } }
 
-        // What a reader sees of a bindable key, given what the key really did this frame.
+        // What a reader sees of a bindable key, given what the key really did this frame. While capturing, the press is
+        // hidden and remembered in `taken`, so the held state and the later release stay hidden from the same readers.
         public bool Down(int key, bool down)
         {
             if (!down) return false;
@@ -45,7 +46,8 @@ namespace BetterKeyBindings
         {
             if (!up) return false;
             if (!taken.Contains(key)) return true;
-            // Every reader in this frame sees no release; the key is free again from the next frame.
+            // `releasing` keeps the key taken until the next Frame, because several readers ask in one frame and all of them
+            // must get the same answer. Every reader in this frame sees no release; the key is free again from the next frame.
             releasing.Add(key);
             return false;
         }

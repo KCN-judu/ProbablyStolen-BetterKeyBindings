@@ -37,7 +37,9 @@ namespace BetterKeyBindings
         static readonly List<int> competitors = new List<int>();
         // The presses seen so far, by key: the frame each went down and whom it belongs to (a Rule.Resolve set).
         static readonly Dictionary<KeyCode, int[]> presses = new Dictionary<KeyCode, int[]>();
+        // OwnersOf returns this while the key is up.
         public const int NotPressed = -1;
+        // `frame`: the Time.frameCount the Gate was last advanced for. `raw`: nesting depth of BeginRaw / EndRaw.
         static int frame = -1, raw;
         // The scroll the game is shown this frame instead of the wheel's movement.
         static float shownY;
@@ -94,6 +96,7 @@ namespace BetterKeyBindings
             return null;
         }
 
+        // Postfixes run First, so the Gate has answered before ModKeys or any other mod's postfix looks at the result.
         static void Read(Harmony harmony, MethodInfo m, string prefix, string postfix)
         {
             var post = Hook(postfix);
@@ -136,6 +139,9 @@ namespace BetterKeyBindings
             Advance(y);
         }
 
+        // The frame's work: step the wheel, decide which notches belong to bindings, and switch the options window's
+        // navigation with the capture state. Everything here reads the real input (raw). The scroll patch calls this
+        // overload with the value it already has, so the property is not read a second time.
         static void Advance(float y)
         {
             if (Time.frameCount == frame) return;
@@ -168,12 +174,16 @@ namespace BetterKeyBindings
                 if (known) presses.Remove(key);
                 return NotPressed;
             }
+            // Already decided: while the key stays held, and again for other readers in the frame it went down. A key
+            // seen down in a later frame is a new press (released and pressed between two reads) and is decided anew.
             if (known && (!down || press[0] == Time.frameCount)) return press[1];
             int owners = Resolve(key);
             presses[key] = new[] { Time.frameCount, owners };
             return owners;
         }
 
+        // Gathers the modifiers of every binding on the key, the game's and other mods', and asks Rule.Resolve.
+        // Raw, because Combo.Held and the bindings' key lookups read input that the Gate would otherwise filter.
         static int Resolve(KeyCode key)
         {
             BeginRaw();
@@ -195,13 +205,16 @@ namespace BetterKeyBindings
             return owners == NotPressed || Rule.Owns(owners, mods);
         }
 
-        // The options window's capture took this key as it went down.
+        // The options window's capture took this key as it went down: from now on nobody else sees it held or released.
+        // Called once per key by Options.Poll.
         public static void Captured(KeyCode key)
         {
             Advance();
             gate.Take((int)key);
         }
 
+        // The EventSystem presses the selected button on Space or Enter by itself; that cannot be told apart from the
+        // capture's own key, so navigation is switched off for the capture and its previous state is put back after.
         static void TurnOffNavigation()
         {
             if (navigationOff != null) return;
@@ -242,6 +255,8 @@ namespace BetterKeyBindings
             return false;
         }
 
+        // The postfixes below skip raw reads (the mod's own and the capture's) and non-bindable keys (Escape, mouse
+        // buttons 0 and 1, which stay the game's).
         static void KeyDownPostfix(KeyCode key, ref bool __result)
         {
             if (raw > 0 || !Combo.IsBindable(key)) return;
@@ -263,6 +278,8 @@ namespace BetterKeyBindings
             __result = gate.Up((int)key, __result);
         }
 
+        // Input.GetKeyDown(string): the name would have to be parsed to know which key it is, so while a capture waits
+        // every named press reads false.
         static void NamedKeyDownPostfix(ref bool __result)
         {
             if (raw > 0 || !__result) return;
@@ -284,6 +301,7 @@ namespace BetterKeyBindings
             __result = gate.Up((int)code, __result);
         }
 
+        // Replaces the scroll the game sees with shownY, which is 0 for a notch that belongs to a binding or a capture.
         static void ScrollDeltaPostfix(ref Vector2 __result)
         {
             if (raw > 0) return;

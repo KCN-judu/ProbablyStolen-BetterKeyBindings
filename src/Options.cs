@@ -29,10 +29,14 @@ namespace BetterKeyBindings
         const string ConflictWindow = "better_key_bindings_conflict";
         const string PressGroup = "press";
 
+        // The game's private members, looked up once in Patch. Each use checks for null, so a game update that renames
+        // one turns that feature off instead of throwing. pendingKeys holds the keys chosen but not yet applied;
+        // consumedEscapeFrame tells the game that Escape was already used this frame.
         static FieldInfo pendingKeysField, windowField, consumedEscapeField;
         static MethodInfo endCapture, setStatus, refreshRules, refreshButton;
 
-        // Modifiers chosen in the open window, by option id. Saved on Apply.
+        // Modifiers chosen in the open window, by option id. They mirror the game's pendingKeys and are saved on Apply
+        // (OnApplySettingPostfix); closing the window drops them.
         static readonly Dictionary<string, int> pendingMods = new Dictionary<string, int>();
 
         // The capture in progress (see Capture), the option it is for, and the text last shown on its button.
@@ -159,6 +163,7 @@ namespace BetterKeyBindings
             return pendingKeysField == null ? null : pendingKeysField.GetValue(ui) as Dictionary<string, KeyCode>;
         }
 
+        // The keys polled during a capture. The wheel is left out for the "hold" bindings, which are held, not pressed.
         static KeyCode[] CaptureKeys(bool wheel)
         {
             if (keys == null) keys = BuildCaptureKeys();
@@ -175,6 +180,7 @@ namespace BetterKeyBindings
             return list.Where(k => !Combo.IsModifier(k)).Concat(list.Where(Combo.IsModifier)).ToArray();
         }
 
+        // Invokes a private game method if it was found, so a missing one is skipped instead of throwing.
         static void Call(MethodInfo m, GameOptionUIManager ui, params object[] args)
         {
             if (m != null && ui != null) m.Invoke(ui, args);
@@ -182,6 +188,9 @@ namespace BetterKeyBindings
 
         // ---------------------------------------------------------------- capture
 
+        // Replaces the game's capture poll while a capture runs; with no capture or a closed window the game's own
+        // code runs. Polled at most once per frame (lastPollFrame). Any failure ends the capture, so the
+        // window cannot be left waiting for a key.
         static bool PollKeyCapturePrefix(GameOptionUIManager __instance)
         {
             if (!KeyBindHelper.IsCapturing || !__instance.IsOpen) return true;
@@ -201,6 +210,8 @@ namespace BetterKeyBindings
             return false;
         }
 
+        // One frame of capture: collect the keys that went down, show the combination so far, and when everything is up
+        // hand the result to Finish. Escape cancels and is marked consumed so it does not also close the window.
         static void Poll(GameOptionUIManager ui)
         {
             string id = KeyBindHelper.CapturingOptionId;
@@ -248,6 +259,8 @@ namespace BetterKeyBindings
             shownText = null;
         }
 
+        // Applies a decided capture to the pending state: reserved keys are refused with the game's own message, a
+        // collision asks for an unbind, anything else is assigned. Nothing is saved until Apply.
         static void Finish(GameOptionUIManager ui, string id, KeyCode key, int mods)
         {
             capturing = null;
@@ -345,6 +358,7 @@ namespace BetterKeyBindings
 
         const float PromptWidth = 640f, PromptHeight = 320f;
 
+        // "Unbind and use": the old owner gets None and the new key goes to the option, both still pending until Apply.
         static void OnUnbind()
         {
             var c = conflict;
@@ -383,6 +397,7 @@ namespace BetterKeyBindings
 
         static void StartCapturePrefix() { CloseConflict(); }
 
+        // The game writes only the key on a button; this adds the modifiers of a binding that takes combinations.
         static void RefreshKeyBindButtonPostfix(GameOptionUIManager __instance, string optionId)
         {
             if (!__instance.IsOpen || optionId == KeyBindHelper.CapturingOptionId || !TakesCombos(optionId)) return;
@@ -409,6 +424,8 @@ namespace BetterKeyBindings
 
         static void OnWindowClosedPostfix() { Reset(); }
 
+        // Remembers whether this call really applies the settings (window open and the game's option store present), so
+        // the postfix stores modifiers only after the game has stored the keys.
         static void OnApplySettingPrefix(GameOptionUIManager __instance, out bool __state)
         {
             __state = __instance.IsOpen && EmporiumOption.Instance != null;
