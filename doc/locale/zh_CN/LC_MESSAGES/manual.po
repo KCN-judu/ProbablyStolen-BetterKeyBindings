@@ -137,11 +137,11 @@ msgstr "每次读取可绑定的输入，都会先问同一个地方，也就是
 
 #: manual/how-it-works.md:28
 msgid "**A binding waiting for a key.** Every key, mouse button and wheel notch pressed while it waits goes only to the capture: nobody else sees it go down, held, or released, even when the release comes after the binding is taken. Keys already down when the capture began are left alone, so their release still reaches whoever saw them go down. The options window's keyboard navigation is off meanwhile, so Space or Enter does not press the selected button."
-msgstr "**有绑定正在等待按键。**等待期间按下的每个按键、鼠标按键和滚轮的每一格都只交给捕获：其他读取方看不到它按下、按住或松开，即使松开发生在绑定确定之后也一样。捕获开始前已经按住的键不受影响，所以它们的松开仍会送到看到它们按下的读取方。这段时间里选项窗口的键盘导航也会关闭，空格或回车不会按下当前选中的按钮。"
+msgstr "**有绑定正在等待按键**。等待期间按下的每个按键、鼠标按键和滚轮的每一格都只交给捕获：其他读取方看不到它按下、按住或松开，即使松开发生在绑定确定之后也一样。捕获开始前已经按住的键不受影响，所以它们的松开仍会送到看到它们按下的读取方。这段时间里选项窗口的键盘导航也会关闭，空格或回车不会按下当前选中的按钮。"
 
 #: manual/how-it-works.md:29
 msgid "**A binding owning a wheel notch.** The notch does not also scroll (see below)."
-msgstr "**滚轮的某一格归某个绑定。**这一格不会同时用于滚动（见下文）。"
+msgstr "**滚轮的某一格归某个绑定**。这一格不会同时用于滚动（见下文）。"
 
 #: manual/how-it-works.md:31
 msgid "The gate covers the engine's key reads by key code and by name, the game's own reads of the middle mouse button and mouse buttons 4 and 5, and the scroll."
